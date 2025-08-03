@@ -8,12 +8,26 @@
 import SwiftUI
 
 struct CatDataView: View {
+    @StateObject private var viewModel = CatListViewModel()
+
     var body: some View {
-        Text("Loading data...")
-            .task {
-                let cats = await CatDataService().fetchCatsData()
-                    print(cats)
+        NavigationView {
+            List(viewModel.catBreeds) { breed in
+                VStack() {
+                    Text(breed.name)
+                        .font(.headline)
+                    Text(breed.origin)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                    Text(breed.description)
+                        .font(.caption)
+                }
             }
+            .navigationTitle("Cats App")
+            .task {
+                await viewModel.loadBreeds()
+            }
+        }
     }
 }
 
