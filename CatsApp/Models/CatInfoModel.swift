@@ -32,6 +32,8 @@ struct CatBreed: Identifiable, Decodable {
     struct BreedImage: Decodable {
         let url: String
     }
+    
+    var isFavorite: Bool = false
 }
 
 extension CatBreed {

@@ -33,6 +33,14 @@ struct CatDataView: View {
 
                     Text(breed.name)
                         .font(.headline)
+
+                    Spacer()
+
+                    Image(systemName: breed.isFavorite ? "star.fill" : "star")
+                        .foregroundColor(breed.isFavorite ? .yellow : .gray)
+                        .onTapGesture {
+                            viewModel.toggleFavorite(for: breed)
+                        }
                 }
                 .padding(.vertical, 5)
             }
@@ -44,5 +52,3 @@ struct CatDataView: View {
         }
     }
 }
-
-
