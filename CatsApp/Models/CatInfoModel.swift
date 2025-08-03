@@ -15,6 +15,8 @@ struct CatBreed: Identifiable, Decodable {
     let description: String
     let lifeSpan: String
     let image: BreedImage?
+    let referenceImageId: String?
+
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -24,9 +26,17 @@ struct CatBreed: Identifiable, Decodable {
         case description
         case lifeSpan = "life_span"
         case image
+        case referenceImageId = "reference_image_id"
     }
 
     struct BreedImage: Decodable {
         let url: String
+    }
+}
+
+extension CatBreed {
+    var referenceImageUrl: String? {
+        guard let id = referenceImageId else { return nil }
+        return "https://cdn2.thecatapi.com/images/\(id).jpg"
     }
 }

@@ -8,26 +8,46 @@
 import SwiftUI
 
 struct CatDataView: View {
+    
+    
     @StateObject private var viewModel = CatListViewModel()
 
     var body: some View {
+        
         NavigationView {
             List(viewModel.catBreeds) { breed in
-                VStack() {
+                
+                HStack(spacing: 16) {
+                    if let imageUrl = breed.referenceImageUrl,
+                       let url = URL(string: imageUrl) {
+                        AsyncImage(url: url) { image in
+                            image
+                                .resizable()
+                                .scaledToFill()
+                        } placeholder: {
+                            Color.gray.opacity(0.2)
+                        }
+                        .frame(width: 60, height: 60)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+
+                    } else {
+                        Color.gray.opacity(0.1)
+                            .frame(width: 60, height: 60)
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                    }
+                    
                     Text(breed.name)
                         .font(.headline)
-                    Text(breed.origin)
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                    Text(breed.description)
-                        .font(.caption)
                 }
+                .padding(.vertical, 5)
             }
             .navigationTitle("Cats App")
             .task {
                 await viewModel.loadBreeds()
             }
+            
         }
     }
 }
+
 

@@ -10,9 +10,10 @@ import Foundation
 @MainActor
 final class CatListViewModel: ObservableObject {
     @Published var catBreeds: [CatBreed] = []
-
+    
     func loadBreeds() async {
         let breeds = await CatDataService().fetchCatsData()
         self.catBreeds = breeds
+
     }
 }
