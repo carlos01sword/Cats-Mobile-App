@@ -11,7 +11,8 @@ struct CatDataView: View {
     var body: some View {
         Text("Loading data...")
             .task {
-                await CatAPIService().fetchCatsData()
+                let cats = await CatDataService().fetchCatsData()
+                    print(cats)
             }
     }
 }
