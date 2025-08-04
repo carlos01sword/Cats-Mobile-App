@@ -6,39 +6,42 @@
 //
 
 import Foundation
+import SwiftData
 
-struct CatBreed: Identifiable, Decodable {
-    let id: String
-    let name: String
-    let origin: String
-    let temperament: String
-    let description: String
-    let lifeSpan: String
-    let image: BreedImage?
-    let referenceImageId: String?
+@Model
+class CatBreed: Identifiable {
+    @Attribute(.unique) var id: String
+    var name: String
+    var origin: String
+    var temperament: String
+    var breedDescription: String
+    var lifeSpan: String
+    var referenceImageId: String?
+    var isFavorite: Bool
 
-
-    enum CodingKeys: String, CodingKey {
-        case id
-        case name
-        case origin
-        case temperament
-        case description
-        case lifeSpan = "life_span"
-        case image
-        case referenceImageId = "reference_image_id"
+    init(
+        id: String,
+        name: String,
+        origin: String,
+        temperament: String,
+        breedDescription: String,
+        lifeSpan: String,
+        referenceImageId: String? = nil,
+        isFavorite: Bool = false
+    ) {
+        self.id = id
+        self.name = name
+        self.origin = origin
+        self.temperament = temperament
+        self.breedDescription = breedDescription
+        self.lifeSpan = lifeSpan
+        self.referenceImageId = referenceImageId
+        self.isFavorite = isFavorite
     }
 
-    struct BreedImage: Decodable {
-        let url: String
-    }
-    
-    var isFavorite: Bool = false
-}
-
-extension CatBreed {
     var referenceImageUrl: String? {
         guard let id = referenceImageId else { return nil }
         return "https://cdn2.thecatapi.com/images/\(id).jpg"
     }
 }
+

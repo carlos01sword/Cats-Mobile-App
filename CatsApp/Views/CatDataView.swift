@@ -6,8 +6,11 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct CatDataView: View {
+    @Environment(\.modelContext) private var context
+    @Query private var storedBreeds: [CatBreed]
     @StateObject private var viewModel = CatListViewModel()
 
     var body: some View {
@@ -17,9 +20,7 @@ struct CatDataView: View {
                     if let imageUrl = breed.referenceImageUrl,
                        let url = URL(string: imageUrl) {
                         AsyncImage(url: url) { image in
-                            image
-                                .resizable()
-                                .scaledToFill()
+                            image.resizable().scaledToFill()
                         } placeholder: {
                             Color.gray.opacity(1)
                         }
@@ -37,9 +38,9 @@ struct CatDataView: View {
                     Spacer()
 
                     Image(systemName: breed.isFavorite ? "star.fill" : "star")
-                        .foregroundColor(breed.isFavorite ? .yellow : .gray)
+                        .foregroundColor(.yellow)
                         .onTapGesture {
-                            viewModel.toggleFavorite(for: breed)
+                            viewModel.toggleFavorite(for: breed, context: context)
                         }
                 }
                 .padding(.vertical, 5)
@@ -47,7 +48,11 @@ struct CatDataView: View {
             .navigationTitle("Cats App")
             .searchable(text: $viewModel.searchText, prompt: "Search breed")
             .task {
-                await viewModel.loadBreeds()
+                if storedBreeds.isEmpty {
+                    await viewModel.loadBreeds(context: context)
+                } else {
+                    viewModel.catBreeds = storedBreeds
+                }
             }
         }
     }
