@@ -59,28 +59,30 @@ struct FavoritesView: View {
                 }
 
                     List(favoriteBreeds) { breed in
-                        HStack(spacing: 16) {
-                            if let urlString = breed.referenceImageUrl,
-                               let url = URL(string: urlString) {
-                                AsyncImage(url: url) { image in
-                                    image.resizable().scaledToFill()
-                                } placeholder: {
-                                    Color.gray.opacity(0.1)
-                                }
-                                .frame(width: 60, height: 60)
-                                .clipShape(RoundedRectangle(cornerRadius: 8))
-                            } else {
-                                Color.gray.opacity(0.1)
+                        NavigationLink(destination: DetailsView()) {
+                            HStack(spacing: 16) {
+                                if let urlString = breed.referenceImageUrl,
+                                   let url = URL(string: urlString) {
+                                    AsyncImage(url: url) { image in
+                                        image.resizable().scaledToFill()
+                                    } placeholder: {
+                                        Color.gray.opacity(0.1)
+                                    }
                                     .frame(width: 60, height: 60)
                                     .clipShape(RoundedRectangle(cornerRadius: 8))
+                                } else {
+                                    Color.gray.opacity(0.1)
+                                        .frame(width: 60, height: 60)
+                                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                                }
+                                
+                                Text(breed.name)
+                                    .font(.headline)
+                                
+                                Spacer()
                             }
-                            
-                            Text(breed.name)
-                                .font(.headline)
-                            
-                            Spacer()
+                            .padding(.vertical, 5)
                         }
-                        .padding(.vertical, 5)
                     }
                         .listStyle(.plain)
                 }
