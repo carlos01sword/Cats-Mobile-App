@@ -10,10 +10,15 @@ import SwiftData
 
 @main
 struct CatsAppApp: App {
-    var body: some Scene {
-        WindowGroup {
-            CatDataView()
-        }
-        .modelContainer(for: CatBreed.self)
+  var body: some Scene {
+    WindowGroup {
+      TabView {
+        CatDataView()
+          .tabItem { Label("All Breeds", systemImage: "list.bullet") }
+        FavoritesView()
+          .tabItem { Label("Favorites", systemImage: "star.fill") }
+      }
+      .modelContainer(for: CatBreed.self)
     }
+  }
 }
