@@ -61,12 +61,12 @@ struct FavoritesView: View {
                     List(favoriteBreeds) { breed in
                         NavigationLink(destination: DetailsView(breed: breed)) {
                             HStack(spacing: 16) {
-                                if let urlString = breed.referenceImageUrl,
-                                   let url = URL(string: urlString) {
+                                if let imageUrl = breed.referenceImageUrl,
+                                   let url = URL(string: imageUrl) {
                                     AsyncImage(url: url) { image in
                                         image.resizable().scaledToFill()
                                     } placeholder: {
-                                        Color.gray.opacity(0.1)
+                                        Color.gray.opacity(1)
                                     }
                                     .frame(width: 60, height: 60)
                                     .clipShape(RoundedRectangle(cornerRadius: 8))
