@@ -35,16 +35,16 @@ struct DetailsView: View {
 
             Spacer()
             
-            if breed.isFavorite {
-               Button(role: .destructive) {
-                   breed.isFavorite = false
-                   try? context.save()
-                   
-               } label: {
-                   Text("Remove from Favorites")
-                   .foregroundColor(.red)
-               }
-           }
+            Button {
+                breed.isFavorite.toggle()
+                try? context.save()
+            } label: {
+                Text(breed.isFavorite ? "Remove from Favorites" : "Add to Favorites")
+                    .foregroundColor(breed.isFavorite ? .red : .blue)
+                    .padding()
+                    .cornerRadius(10)
+            }
+            .frame(maxWidth: .infinity, alignment: .center)
         }
        .padding()
    }
