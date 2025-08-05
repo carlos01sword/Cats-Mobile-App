@@ -16,7 +16,7 @@ struct CatDataView: View {
     var body: some View {
         NavigationView {
             List(viewModel.filteredBreeds) { breed in
-                NavigationLink(destination: DetailsView()) {
+                NavigationLink(destination: DetailsView(breed: breed)) {
                     HStack(spacing: 16) {
                         if let imageUrl = breed.referenceImageUrl,
                            let url = URL(string: imageUrl) {

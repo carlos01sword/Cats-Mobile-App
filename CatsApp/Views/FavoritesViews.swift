@@ -59,7 +59,7 @@ struct FavoritesView: View {
                 }
 
                     List(favoriteBreeds) { breed in
-                        NavigationLink(destination: DetailsView()) {
+                        NavigationLink(destination: DetailsView(breed: breed)) {
                             HStack(spacing: 16) {
                                 if let urlString = breed.referenceImageUrl,
                                    let url = URL(string: urlString) {
