@@ -40,11 +40,20 @@ struct DetailsView: View {
                 try? context.save()
             } label: {
                 Text(breed.isFavorite ? "Remove from Favorites" : "Add to Favorites")
-                    .foregroundColor(breed.isFavorite ? .red : .blue)
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .multilineTextAlignment(.center)
                     .padding()
-                    .cornerRadius(10)
+                    .frame(minWidth: 220)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(breed.isFavorite ? Color.red : Color.blue)
+                            .shadow(color: Color(.systemGray3), radius: 2, x: 0, y: 2)
+                    )
             }
+            .padding(.vertical, 8)
             .frame(maxWidth: .infinity, alignment: .center)
+            
         }
        .padding()
    }
