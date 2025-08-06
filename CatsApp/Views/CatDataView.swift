@@ -14,55 +14,67 @@ struct CatDataView: View {
     @StateObject private var viewModel = CatListViewModel()
 
     var body: some View {
-        NavigationView {
-            List(viewModel.filteredBreeds) { breed in
-                NavigationLink(destination: DetailsView(breed: breed)) {
-                    HStack(spacing: 16) {
-                        if let imageUrl = breed.referenceImageUrl,
-                           let url = URL(string: imageUrl) {
-                            AsyncImage(url: url) { image in
-                                image.resizable().scaledToFill()
-                            } placeholder: {
-                                Color.gray.opacity(1)
-                            }
-                            .frame(width: 60, height: 60)
-                            .clipShape(RoundedRectangle(cornerRadius: 8))
-                        } else {
-                            Color.gray.opacity(0.1)
-                                .frame(width: 60, height: 60)
-                                .clipShape(RoundedRectangle(cornerRadius: 8))
-                        }
+           NavigationView {
+               ScrollView {
+                   VStack(spacing: 16) {
+                       ForEach(viewModel.filteredBreeds) { breed in
+                           NavigationLink(destination: DetailsView(breed: breed)) {
+                               HStack(spacing: 16) {
+                                   if let imageUrl = breed.referenceImageUrl,
+                                      let url = URL(string: imageUrl) {
+                                       AsyncImage(url: url) { image in
+                                           image.resizable().scaledToFill()
+                                       } placeholder: {
+                                           Color.gray.opacity(1)
+                                       }
+                                       .frame(width: 60, height: 60)
+                                       .clipShape(RoundedRectangle(cornerRadius: 8))
+                                   } else {
+                                       Color.gray.opacity(0.1)
+                                           .frame(width: 60, height: 60)
+                                           .clipShape(RoundedRectangle(cornerRadius: 8))
+                                   }
 
-                        Text(breed.name)
-                            .font(.headline)
+                                   Text(breed.name)
+                                       .font(.headline)
+                                       .foregroundColor(.primary)
 
-                        Spacer()
+                                   Spacer()
 
-                        Image(systemName: breed.isFavorite ? "star.fill" : "star")
-                            .foregroundColor(.yellow)
-                            .onTapGesture {
-                                viewModel.toggleFavorite(for: breed, context: context)
-                            }
-                    }
-                    .padding(.vertical, 5)
-                }
-            }
-            .navigationTitle("Cats App")
-            .alert("Failed to Load Data", isPresented: .constant(viewModel.fetchErrorMessage != nil), actions: {
-                Button("OK") {
-                    viewModel.fetchErrorMessage = nil
-                }
-            }, message: {
-                Text(viewModel.fetchErrorMessage ?? "")
-            })
-            .searchable(text: $viewModel.searchText, prompt: "Search breed")
-            .task {
-                if storedBreeds.isEmpty {
-                    await viewModel.loadBreeds(context: context)
-                } else {
-                    viewModel.catBreeds = storedBreeds
-                }
-            }
-        }
-    }
+                                   Image(systemName: breed.isFavorite ? "star.fill" : "star")
+                                       .foregroundColor(.yellow)
+                                       .onTapGesture {
+                                           viewModel.toggleFavorite(for: breed, context: context)
+                                       }
+                               }
+                               .padding()
+                               .background(
+                                   RoundedRectangle(cornerRadius: 16)
+                                       .fill(Color(.systemBackground))
+                                       .shadow(color: Color(.systemGray3), radius: 4, x: 0, y: 2)
+                               )
+                           }
+                       }
+                   }
+                   .padding()
+               }
+               .navigationTitle("Cats App")
+               .alert("Failed to Load Data", isPresented: .constant(viewModel.fetchErrorMessage != nil), actions: {
+                   Button("OK") {
+                       viewModel.fetchErrorMessage = nil
+                   }
+               }, message: {
+                   Text(viewModel.fetchErrorMessage ?? "")
+               })
+               .searchable(text: $viewModel.searchText, prompt: "Search breed")
+               .task {
+                   if storedBreeds.isEmpty {
+                       await viewModel.loadBreeds(context: context)
+                   } else {
+                       viewModel.catBreeds = storedBreeds
+                   }
+               }
+           }
+       }
 }
+

@@ -10,61 +10,81 @@ import SwiftData
 
 struct FavoritesView: View {
     @Environment(\.modelContext) private var context
-    @Query(
-        filter: #Predicate { (breed: CatBreed) in
-            breed.isFavorite
-        }
-    ) private var favoriteBreeds: [CatBreed]
-    
+    @State private var favoriteBreeds: [CatBreed] = []
+
     var body: some View {
         NavigationView {
-            VStack() {
-                if !favoriteBreeds.isEmpty {
-                    let avg = Average.averageLifeSpan(from: favoriteBreeds)
-                    Text("Average lifespan: \(avg) years")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                        .padding(.horizontal)
-                        .frame(height: 36)
-                        .frame(maxWidth: .infinity)
-                        .padding(.top, 8)
-                        .background(RoundedRectangle(cornerRadius: 14)
-                            .fill(Color(.systemGray6))
-                            .shadow(color: Color(.systemGray3), radius: 2, x: 0, y: 1)
+            ScrollView {
+                VStack(spacing: 16) {
+                    if !favoriteBreeds.isEmpty {
+                        let avg = Average.averageLifeSpan(from: favoriteBreeds)
+                        Text("Average lifespan: \(avg) years")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
                             .padding(.horizontal)
-                            .padding(.top,8)
+                            .frame(height: 36)
+                            .frame(maxWidth: .infinity)
+                            .background(
+                                RoundedRectangle(cornerRadius: 14)
+                                    .fill(Color(.systemGray6))
+                                    .shadow(color: Color(.systemGray3), radius: 2, x: 0, y: 1)
+                                    .padding(.horizontal)
                             )
-                }
-                List(favoriteBreeds) { breed in
-                    NavigationLink(destination: DetailsView(breed: breed)) {
-                        HStack(spacing: 16) {
-                            if let imageUrl = breed.referenceImageUrl,
-                               let url = URL(string: imageUrl) {
-                                AsyncImage(url: url) { image in
-                                    image.resizable().scaledToFill()
-                                } placeholder: {
-                                    Color.gray.opacity(1)
-                                }
-                                .frame(width: 60, height: 60)
-                                .clipShape(RoundedRectangle(cornerRadius: 8))
-                            } else {
-                                Color.gray.opacity(0.1)
+                    }
+
+                    ForEach(favoriteBreeds) { breed in
+                        NavigationLink(destination: DetailsView(breed: breed)) {
+                            HStack(spacing: 16) {
+                                if let imageUrl = breed.referenceImageUrl,
+                                   let url = URL(string: imageUrl) {
+                                    AsyncImage(url: url) { image in
+                                        image.resizable().scaledToFill()
+                                    } placeholder: {
+                                        Color.gray.opacity(1)
+                                    }
                                     .frame(width: 60, height: 60)
                                     .clipShape(RoundedRectangle(cornerRadius: 8))
+                                } else {
+                                    Color.gray.opacity(0.1)
+                                        .frame(width: 60, height: 60)
+                                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                                }
+
+                                Text(breed.name)
+                                    .font(.headline)
+                                    .foregroundColor(.primary)
+
+                                Spacer()
                             }
-
-                            Text(breed.name)
-                                .font(.headline)
-
-                            Spacer()
+                            .padding()
+                            .background(
+                                RoundedRectangle(cornerRadius: 16)
+                                    .fill(Color(.systemBackground))
+                                    .shadow(color: Color(.systemGray3), radius: 4, x: 0, y: 2)
+                            )
                         }
-                        .padding(.vertical, 5)
+                        .buttonStyle(PlainButtonStyle())
                     }
                 }
-                .navigationTitle("Favorites")
+                .padding()
             }
-            .background(Color(.systemGroupedBackground))
-            
+            .navigationTitle("Favorites")
+            .onAppear {
+                loadFavorites()
+            }
+            .task {
+                loadFavorites()
+            }
+            .background(Color(.systemBackground))
         }
     }
+    
+    func loadFavorites() {
+            let descriptor = FetchDescriptor<CatBreed>(
+                predicate: #Predicate { $0.isFavorite }
+            )
+            if let fetched = try? context.fetch(descriptor) {
+                favoriteBreeds = fetched
+            }
+        }
 }
