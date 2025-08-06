@@ -28,18 +28,20 @@ struct CatDataService {
         }
     }
 
-    func fetchCatsData() async -> [CatBreed] {
-        guard let url = URL(string: apiURL) else { return [] }
+    func fetchCatsData() async -> Result<[CatBreed], Error> {
+        guard let url = URL(string: apiURL) else { return
+            .failure(URLError(.badURL)) }
+        
 
         var request = URLRequest(url: url)
         request.setValue(apiKey, forHTTPHeaderField: "x-api-key")
 
         do {
             let (data, _) = try await URLSession.shared.data(for: request)
-            return try JSONDecoder().decode([CatBreed].self, from: data)
+            let decoded = try JSONDecoder().decode([CatBreed].self, from: data)
+            return .success(decoded)
         } catch {
-            print("Fetch error:", error.localizedDescription)
-            return []
+            return .failure(error)
         }
     }
 }

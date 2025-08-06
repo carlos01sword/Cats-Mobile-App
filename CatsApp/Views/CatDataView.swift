@@ -48,6 +48,13 @@ struct CatDataView: View {
                 }
             }
             .navigationTitle("Cats App")
+            .alert("Failed to Load Data", isPresented: .constant(viewModel.fetchErrorMessage != nil), actions: {
+                Button("OK") {
+                    viewModel.fetchErrorMessage = nil
+                }
+            }, message: {
+                Text(viewModel.fetchErrorMessage ?? "")
+            })
             .searchable(text: $viewModel.searchText, prompt: "Search breed")
             .task {
                 if storedBreeds.isEmpty {
