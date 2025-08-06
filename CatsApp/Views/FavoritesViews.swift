@@ -16,42 +16,11 @@ struct FavoritesView: View {
         }
     ) private var favoriteBreeds: [CatBreed]
     
-    
-    func averageLifeSpan(from breeds: [CatBreed]) -> Int {
-        
-        guard !breeds.isEmpty else {
-            return 0
-        }
-        
-        var total: Int = 0
-        var counter: Int = 0
-        
-        for breed in breeds {
-            let values = breed.lifeSpan
-                .split(separator: "-")
-                .map { $0.trimmingCharacters(in: .whitespaces) }
-            
-            if let max = values.last,
-               let maxInt = Int(max){
-                total += maxInt
-                counter += 1
-            }
-        }
-        
-        guard counter > 0 else {
-            return 0
-        }
-        
-        return total / counter
-        
-    }
-    
-    
     var body: some View {
         NavigationView {
             VStack() {
                 if !favoriteBreeds.isEmpty {
-                    let avg = averageLifeSpan(from: favoriteBreeds)
+                    let avg = Average.averageLifeSpan(from: favoriteBreeds)
                     Text("Average lifespan: \(avg) years")
                         .font(.subheadline)
                         .foregroundColor(.secondary)

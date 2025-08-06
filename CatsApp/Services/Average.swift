@@ -1,0 +1,40 @@
+//
+//  Average.swift
+//  CatsApp
+//
+//  Created by Carlos Costa on 06/08/2025.
+//
+
+import Foundation
+import SwiftData
+
+struct Average: Codable, Equatable {
+    static func averageLifeSpan(from breeds: [CatBreed]) -> Int {
+        
+        guard !breeds.isEmpty else {
+            return 0
+        }
+        
+        var total: Int = 0
+        var counter: Int = 0
+        
+        for breed in breeds {
+            let values = breed.lifeSpan
+                .split(separator: "-")
+                .map { $0.trimmingCharacters(in: .whitespaces) }
+            
+            if let max = values.last,
+               let maxInt = Int(max){
+                total += maxInt
+                counter += 1
+            }
+        }
+        
+        guard counter > 0 else {
+            return 0
+        }
+        
+        return total / counter
+        
+    }
+}
