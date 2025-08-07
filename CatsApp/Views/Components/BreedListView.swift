@@ -28,6 +28,7 @@ struct BreedListView<Header: View>: View {
                 Section {
                     header
                 }
+                .listRowSeparator(.hidden)
             }
 
             ForEach(breeds) { breed in
