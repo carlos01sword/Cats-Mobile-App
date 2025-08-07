@@ -26,4 +26,32 @@ struct CatsAppTests {
         let result = Average.averageLifeSpan(from: breeds)
         #expect(result == 0)
     }
+    
+    @Test func testDefaultFavoriteFalse() throws {
+            let breed = CatBreed(
+                id: "1",
+                name: "Test",
+                origin: "",
+                temperament: "",
+                breedDescription: "",
+                lifeSpan: ""
+            )
+            #expect(breed.isFavorite == false)
+        }
+    
+    @Test func testToggleFavorite() throws {
+           let breed = CatBreed(
+               id: "1",
+               name: "Test",
+               origin: "",
+               temperament: "",
+               breedDescription: "",
+               lifeSpan: ""
+           )
+           #expect(breed.isFavorite == false)
+           breed.isFavorite.toggle()
+           #expect(breed.isFavorite == true)
+           breed.isFavorite.toggle()
+           #expect(breed.isFavorite == false)
+       }
 }
