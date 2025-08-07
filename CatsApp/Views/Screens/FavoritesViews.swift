@@ -11,31 +11,35 @@ import SwiftData
 struct FavoritesView: View {
     @Environment(\.modelContext) private var context
     @StateObject private var viewModel = FavoritesViewModel()
-
-
+    @State private var selectedBreed: CatBreed?
+    
     var body: some View {
         NavigationView {
-            ScrollView {
-                VStack(spacing: 16) {
-                    AvgView(breeds: viewModel.favoriteBreeds)
-
-                    ForEach(viewModel.favoriteBreeds) { breed in
-                        NavigationLink(destination: DetailsView(breed: breed)) {
-                            BreedRowView(breed: breed, onFavoriteTapped: nil)
-                        }
-                        .buttonStyle(PlainButtonStyle())
+            BreedListView(
+                breeds: viewModel.favoriteBreeds,
+                header: AvgView(breeds: viewModel.favoriteBreeds)
+            ) { breed in
+                AnyView(
+                    BreedRowView(breed: breed,onFavoriteTapped: nil)
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        selectedBreed = breed
                     }
-                }
-                .padding()
+                    .buttonStyle(PlainButtonStyle())
+                )
             }
             .navigationTitle("Favorites")
             .onAppear {
                 viewModel.loadFavorites(from: context)
             }
-            .task {
+        }
+        .sheet(item: $selectedBreed) { breed in
+            DetailsView(breed: breed)
+        }
+        .onChange(of: selectedBreed) {
+            if selectedBreed == nil {
                 viewModel.loadFavorites(from: context)
             }
-            .background(Color(.systemBackground))
         }
     }
 }
