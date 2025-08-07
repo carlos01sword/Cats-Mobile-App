@@ -8,33 +8,50 @@
 import SwiftUI
 import SwiftData
 
-import SwiftUI
-
 struct DetailsView: View {
     
     @Environment(\.modelContext) private var context
     @Bindable var breed: CatBreed
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text(breed.name)
-                .font(.title)
-                .bold()
+        VStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    Spacer(minLength: 32)
+                    
+                    Text(breed.name)
+                        .font(.title)
+                        .bold()
+                        .multilineTextAlignment(.center)
+                        .frame(maxWidth: .infinity, alignment: .center)
 
-            Text("Origin: \(breed.origin)")
-                .font(.subheadline)
+                    VStack(alignment: .leading, spacing: 24) {
+                        Text("Origin:")
+                            .font(.headline)
+                        Text(breed.origin)
+                            .font(.body)
+                        Text("Temperament:")
+                            .font(.headline)
+                        Text(breed.temperament)
+                            .font(.body)
+                        Text("Description:")
+                            .font(.headline)
+                        Text(breed.breedDescription)
+                            .font(.body)
+                    }
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 24, style: .continuous)
+                            .fill(Color(.secondarySystemBackground))
+                            .shadow(color: Color.black.opacity(0.1), radius: 8, x: 0, y: 4)
+                    )
+                    .padding(.horizontal)
 
-            Text("Temperament: \(breed.temperament)")
-                .font(.subheadline)
+                    Spacer(minLength: 32)
+                }
+                .padding()
+            }
 
-            Text("Description:")
-                .font(.headline)
-
-            Text(breed.breedDescription)
-                .font(.body)
-
-            Spacer()
-            
             Button {
                 breed.isFavorite.toggle()
                 try? context.save()
@@ -51,10 +68,9 @@ struct DetailsView: View {
                             .shadow(color: Color(.systemGray3), radius: 2, x: 0, y: 2)
                     )
             }
-            .padding(.vertical, 8)
-            .frame(maxWidth: .infinity, alignment: .center)
-            
+            .padding(.vertical, 12)
+            .frame(maxWidth: .infinity)
+            .background(Color(.systemBackground))
         }
-       .padding()
-   }
+    }
 }
