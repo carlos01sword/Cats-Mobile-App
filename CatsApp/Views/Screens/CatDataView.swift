@@ -10,8 +10,7 @@ import SwiftData
 
 struct CatDataView: View {
     @Environment(\.modelContext) private var context
-    @Query private var storedBreeds: [CatBreed]
-    @StateObject private var viewModel = CatListViewModel()
+    @EnvironmentObject private var viewModel: CatListViewModel
     @State private var selectedBreed: CatBreed?
 
     var body: some View {
@@ -20,6 +19,11 @@ struct CatDataView: View {
                 AnyView(
                     BreedRowView(breed: breed) {
                         viewModel.toggleFavorite(for: breed, context: context)
+                    }
+                    .onAppear {
+                        if breed == viewModel.filteredBreeds.last {
+                            Task { await viewModel.loadMore(context: context) }
+                        }
                     }
                     .contentShape(Rectangle())
                     .onTapGesture {
@@ -35,10 +39,10 @@ struct CatDataView: View {
                 Text(viewModel.fetchErrorMessage ?? "")
             }
             .task {
-                if storedBreeds.isEmpty {
-                    await viewModel.loadBreeds(context: context)
-                } else {
-                    viewModel.catBreeds = storedBreeds
+                await viewModel.refreshBreeds(from: context)
+
+                if viewModel.catBreeds.isEmpty {
+                    await viewModel.loadInitial(context: context)
                 }
             }
         }

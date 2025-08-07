@@ -10,17 +10,24 @@ import SwiftData
 
 struct FavoritesView: View {
     @Environment(\.modelContext) private var context
-    @StateObject private var viewModel = FavoritesViewModel()
+    @EnvironmentObject private var viewModel: CatListViewModel
     @State private var selectedBreed: CatBreed?
     
     var body: some View {
         NavigationView {
+            if viewModel.favoriteBreeds.isEmpty {
+                Text("No favorites selected yet!")
+                    .foregroundStyle(.secondary)
+                    .navigationTitle("Favorites")
+            } else {
             BreedListView(
                 breeds: viewModel.favoriteBreeds,
                 header: AvgView(breeds: viewModel.favoriteBreeds)
             ) { breed in
                 AnyView(
-                    BreedRowView(breed: breed,onFavoriteTapped: nil)
+                    BreedRowView(breed: breed, onFavoriteTapped: {
+                            viewModel.toggleFavorite(for: breed, context: context)
+                        })
                     .contentShape(Rectangle())
                     .onTapGesture {
                         selectedBreed = breed
@@ -29,17 +36,10 @@ struct FavoritesView: View {
                 )
             }
             .navigationTitle("Favorites")
-            .onAppear {
-                viewModel.loadFavorites(from: context)
             }
         }
         .sheet(item: $selectedBreed) { breed in
             DetailsView(breed: breed)
-        }
-        .onChange(of: selectedBreed) {
-            if selectedBreed == nil {
-                viewModel.loadFavorites(from: context)
-            }
         }
     }
 }

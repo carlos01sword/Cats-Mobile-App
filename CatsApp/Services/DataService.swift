@@ -28,11 +28,16 @@ struct CatDataService {
         }
     }
 
-    func fetchCatsData() async -> Result<[CatBreed], Error> {
-        guard let url = URL(string: apiURL) else { return
-            .failure(URLError(.badURL)) }
+    func fetchCatsData(page: Int = 0, limit: Int = 10) async -> Result<[CatBreed], Error> {
+        var comps = URLComponents(string: apiURL)
+        comps?.queryItems = [
+          URLQueryItem(name: "page", value: "\(page)"),
+          URLQueryItem(name: "limit", value: "\(limit)")
+        ]
+        guard let url = comps?.url else {
+            return .failure(URLError(.badURL))
+        }
         
-
         var request = URLRequest(url: url)
         request.setValue(apiKey, forHTTPHeaderField: "x-api-key")
 
