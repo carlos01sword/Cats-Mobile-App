@@ -32,6 +32,8 @@ struct BreedListView<Header: View>: View {
 
             ForEach(breeds) { breed in
                 rowContent(breed)
+                    .listRowSeparator(.hidden)
+                    
             }
         }
         .listStyle(.plain)
