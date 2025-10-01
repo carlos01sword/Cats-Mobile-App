@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct BreedTabView: View {
+    @EnvironmentObject private var viewModel: CatListViewModel
+        
     var body: some View {
         TabView {
             CatDataView()
@@ -15,6 +17,7 @@ struct BreedTabView: View {
             FavoritesView()
                 .tabItem { Label("Favorites", systemImage: "star.fill") }
         }
+        .breedSearchable($viewModel.searchText)
     }
 }
 

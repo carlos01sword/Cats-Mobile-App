@@ -32,7 +32,6 @@ struct CatDataView: View {
                     )
             }
             .navigationTitle("Cats App")
-            .searchable(text: $viewModel.searchText, prompt: "Search breed")
             .alert("Failed to Load Data", isPresented: .constant(viewModel.fetchErrorMessage != nil)) {
                 Button("OK", role: .cancel) {}
             } message: {
