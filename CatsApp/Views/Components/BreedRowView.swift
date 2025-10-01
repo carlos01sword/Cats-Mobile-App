@@ -50,3 +50,7 @@ struct BreedRowView: View {
         )
     }
 }
+
+#Preview {
+    BreedRowView(breed: MockData.sampleBreed, onFavoriteTapped: { })
+}

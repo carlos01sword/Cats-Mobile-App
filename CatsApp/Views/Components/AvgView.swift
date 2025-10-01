@@ -29,3 +29,7 @@ struct AvgView: View {
         }
     }
 }
+
+#Preview {
+    AvgView(breeds: MockData.breeds)
+}
