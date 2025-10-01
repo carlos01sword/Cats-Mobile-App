@@ -20,5 +20,6 @@ struct BreedTabView: View {
 
 #Preview {
     BreedTabView()
+        .modelContainer(for: CatBreed.self, inMemory: true)
         .environmentObject(CatListViewModel())
 }
