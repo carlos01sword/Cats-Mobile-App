@@ -1,0 +1,24 @@
+//
+//  BreedTabView.swift
+//  CatsApp
+//
+//  Created by Carlos Costa on 01/10/2025.
+//
+
+import SwiftUI
+
+struct BreedTabView: View {
+    var body: some View {
+        TabView {
+            CatDataView()
+                .tabItem { Label("All Breeds", systemImage: "list.bullet") }
+            FavoritesView()
+                .tabItem { Label("Favorites", systemImage: "star.fill") }
+        }
+    }
+}
+
+#Preview {
+    BreedTabView()
+        .environmentObject(CatListViewModel())
+}

@@ -52,3 +52,8 @@ struct CatDataView: View {
     }
 }
 
+#Preview {
+    CatDataView()
+        .modelContainer(for: CatBreed.self, inMemory: true)
+        .environmentObject(CatListViewModel())
+}
