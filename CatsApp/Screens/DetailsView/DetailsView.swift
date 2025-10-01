@@ -74,3 +74,7 @@ struct DetailsView: View {
         }
     }
 }
+
+#Preview {
+    DetailsView(breed: MockData.sampleBreed)
+}
