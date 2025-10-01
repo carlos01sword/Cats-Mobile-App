@@ -13,33 +13,20 @@ struct BreedRowView: View {
 
     var body: some View {
         HStack(spacing: 16) {
-            if let imageUrl = breed.referenceImageUrl,
-               let url = URL(string: imageUrl) {
-                AsyncImage(url: url) { image in
-                    image.resizable().scaledToFill()
-                } placeholder: {
-                    Color.gray.opacity(0.3)
-                }
-                .frame(width: 60, height: 60)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
-            } else {
-                Color.gray.opacity(0.1)
-                    .frame(width: 60, height: 60)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-            }
+            BreedThumbnailView(urlString: breed.referenceImageUrl)
 
             Text(breed.name)
                 .font(.headline)
                 .foregroundColor(.primary)
+                .accessibilityLabel(breed.name)
 
             Spacer()
 
             if let onFavoriteTapped = onFavoriteTapped {
                 Image(systemName: breed.isFavorite ? "star.fill" : "star")
                     .foregroundColor(.yellow)
-                    .onTapGesture {
-                        onFavoriteTapped()
-                    }
+                    .accessibilityLabel(breed.isFavorite ? "Favorited" : "Not favorited")
+                    .onTapGesture { onFavoriteTapped() }
             }
         }
         .padding()
