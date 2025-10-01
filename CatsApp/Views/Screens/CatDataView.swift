@@ -14,7 +14,7 @@ struct CatDataView: View {
     @State private var selectedBreed: CatBreed?
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             BreedListView(breeds: viewModel.filteredBreeds,header: EmptyView()) { breed in
                 AnyView(
                     BreedRowView(breed: breed) {

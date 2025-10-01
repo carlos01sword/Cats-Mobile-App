@@ -14,7 +14,7 @@ struct FavoritesView: View {
     @State private var selectedBreed: CatBreed?
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             if viewModel.favoriteBreeds.isEmpty {
                 Text("No favorites selected yet!")
                     .foregroundStyle(.secondary)
