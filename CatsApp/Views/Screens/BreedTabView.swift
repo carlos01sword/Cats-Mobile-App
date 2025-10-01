@@ -17,7 +17,6 @@ struct BreedTabView: View {
             FavoritesView()
                 .tabItem { Label("Favorites", systemImage: "star.fill") }
         }
-        .breedSearchable($viewModel.searchText)
     }
 }
 
