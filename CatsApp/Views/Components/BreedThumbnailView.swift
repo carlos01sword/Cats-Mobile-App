@@ -1,7 +1,7 @@
 //  BreedThumbnailView.swift
 //  CatsApp
 //
-//  Created by Refactor on 01/10/2025.
+//  Created by Carlos on 01/10/2025.
 //
 import SwiftUI
 
@@ -13,15 +13,26 @@ struct BreedThumbnailView: View {
     var body: some View {
         Group {
             if let urlString, let url = URL(string: urlString) {
-                AsyncImage(url: url) { image in
-                    image
-                        .resizable()
-                        .scaledToFill()
-                } placeholder: {
-                    Color.gray.opacity(0.3)
+                AsyncImage(url: url) { phase in
+                    switch phase {
+                    case .empty:
+                        ImageLoader(cornerRadius: cornerRadius)
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .scaledToFill()
+                    case .failure(_):
+                        Image(systemName: "pawprint.fill")
+                            .resizable()
+                            .scaledToFit()
+                    @unknown default:
+                        Color.red.opacity(0.2)
+                    }
                 }
             } else {
-                Color.gray.opacity(0.1)
+                Image(systemName: "photo")
+                    .resizable()
+                    .scaledToFit()
             }
         }
         .frame(width: size, height: size)
@@ -34,6 +45,7 @@ struct BreedThumbnailView: View {
     HStack(spacing: 20) {
         BreedThumbnailView(urlString: "https://cdn2.thecatapi.com/images/abc.jpg")
         BreedThumbnailView(urlString: nil)
+        BreedThumbnailView(urlString: "invalid-url")
     }
     .padding()
 }
