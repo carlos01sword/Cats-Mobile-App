@@ -16,9 +16,7 @@ struct FavoritesView: View {
     var body: some View {
         NavigationStack {
             if viewModel.favoriteBreeds.isEmpty {
-                Text("No favorites selected yet!")
-                    .foregroundStyle(.secondary)
-                    .navigationTitle("Favorites")
+                FavoritesEmptyStateView()
             } else {
             BreedListView(
                 breeds: viewModel.favoriteBreeds,
