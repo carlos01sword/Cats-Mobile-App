@@ -40,3 +40,11 @@ struct BreedListView<Header: View>: View {
         .listStyle(.plain)
     }
 }
+
+#Preview {
+    BreedListView(breeds: MockData.breeds, header: EmptyView()) { breed in
+        AnyView(
+            BreedRowView(breed: breed) {}
+        )
+    }
+}

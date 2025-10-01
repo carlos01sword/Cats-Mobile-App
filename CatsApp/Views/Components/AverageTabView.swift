@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct AvgView: View {
+struct AverageTabView: View {
     let breeds: [CatBreed]
 
     var body: some View {
@@ -31,5 +31,5 @@ struct AvgView: View {
 }
 
 #Preview {
-    AvgView(breeds: MockData.breeds)
+    AverageTabView(breeds: MockData.breeds)
 }
