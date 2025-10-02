@@ -14,8 +14,7 @@ protocol BreedsFetching {
 struct BreedsDataService: BreedsFetching {
     
     private let apiURL = "https://api.thecatapi.com/v1/breeds"
-    private let apiKey = "live_qZSunkWQL4nxKItjmfA2TcTwIolM00gM2zU489lP9X7oCLuxzHp7nSzvBAApOOY"
-
+    let apiKey = SecretsDecoder.breedsApiKey
     struct CatBreed: Decodable {
         let id: String
         let name: String

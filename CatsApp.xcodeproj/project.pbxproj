@@ -23,7 +23,22 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		0ADC69922E8ED1C0003E1CDB /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		0ADC69822E8ED1BF003E1CDB /* ManagedSettings.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ManagedSettings.framework; path = System/Library/Frameworks/ManagedSettings.framework; sourceTree = SDKROOT; };
+		0ADC69842E8ED1BF003E1CDB /* ManagedSettingsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ManagedSettingsUI.framework; path = System/Library/Frameworks/ManagedSettingsUI.framework; sourceTree = SDKROOT; };
 		873C03612E3D7AB7001527C1 /* CatsApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CatsApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		873C03712E3D7AB8001527C1 /* CatsAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CatsAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		873C037B2E3D7AB8001527C1 /* CatsAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CatsAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -46,6 +61,21 @@
 			);
 			target = 873C037A2E3D7AB8001527C1 /* CatsAppUITests */;
 		};
+		0ADC699A2E8ED433003E1CDB /* Exceptions for "CatsApp" folder in "CatsApp" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+				Secrets.xcconfig,
+			);
+			target = 873C03602E3D7AB7001527C1 /* CatsApp */;
+		};
+		0ADC699C2E8ED52B003E1CDB /* Exceptions for "CatsApp" folder in "CatsAppUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Secrets.xcconfig,
+			);
+			target = 873C037A2E3D7AB8001527C1 /* CatsAppUITests */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -60,6 +90,10 @@
 		};
 		873C03632E3D7AB7001527C1 /* CatsApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				0ADC699A2E8ED433003E1CDB /* Exceptions for "CatsApp" folder in "CatsApp" target */,
+				0ADC699C2E8ED52B003E1CDB /* Exceptions for "CatsApp" folder in "CatsAppUITests" target */,
+			);
 			path = CatsApp;
 			sourceTree = "<group>";
 		};
@@ -100,6 +134,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0ADC69812E8ED1BF003E1CDB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0ADC69822E8ED1BF003E1CDB /* ManagedSettings.framework */,
+				0ADC69842E8ED1BF003E1CDB /* ManagedSettingsUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		873C03582E3D7AB7001527C1 = {
 			isa = PBXGroup;
 			children = (
@@ -107,6 +150,7 @@
 				0ADC69672E8E7CB0003E1CDB /* Assets */,
 				873C03742E3D7AB8001527C1 /* CatsAppTests */,
 				873C037E2E3D7AB8001527C1 /* CatsAppUITests */,
+				0ADC69812E8ED1BF003E1CDB /* Frameworks */,
 				873C03622E3D7AB7001527C1 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -131,6 +175,7 @@
 				873C035D2E3D7AB7001527C1 /* Sources */,
 				873C035E2E3D7AB7001527C1 /* Frameworks */,
 				873C035F2E3D7AB7001527C1 /* Resources */,
+				0ADC69922E8ED1C0003E1CDB /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
@@ -200,7 +245,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1620;
+				LastSwiftUpdateCheck = 2600;
 				LastUpgradeCheck = 2600;
 				TargetAttributes = {
 					873C03602E3D7AB7001527C1 = {
@@ -301,6 +346,8 @@
 /* Begin XCBuildConfiguration section */
 		873C03832E3D7AB8001527C1 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 873C03632E3D7AB7001527C1 /* CatsApp */;
+			baseConfigurationReferenceRelativePath = Secrets.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -422,14 +469,18 @@
 		};
 		873C03862E3D7AB8001527C1 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 873C03632E3D7AB7001527C1 /* CatsApp */;
+			baseConfigurationReferenceRelativePath = Secrets.xcconfig;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Assets\"";
+				DEVELOPMENT_TEAM = 6J895MLH96;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CatsApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -456,8 +507,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Assets\"";
+				DEVELOPMENT_TEAM = 6J895MLH96;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CatsApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
