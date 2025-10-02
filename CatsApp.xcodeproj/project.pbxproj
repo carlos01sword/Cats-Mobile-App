@@ -46,47 +46,70 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		0ADC696A2E8E7CB0003E1CDB /* Exceptions for "Assets" folder in "CatsApp" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Assets.xcassets,
-				"Preview Assets.xcassets",
-			);
-			target = 873C03602E3D7AB7001527C1 /* CatsApp */;
-		};
-		0ADC696B2E8E7CB0003E1CDB /* Exceptions for "Assets" folder in "CatsAppUITests" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Assets.xcassets,
-				"Preview Assets.xcassets",
-			);
-			target = 873C037A2E3D7AB8001527C1 /* CatsAppUITests */;
-		};
 		0ADC699A2E8ED433003E1CDB /* Exceptions for "CatsApp" folder in "CatsApp" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Info.plist,
-				Secrets.xcconfig,
+				Resources/Info.plist,
+				Resources/Secrets.xcconfig,
 			);
 			target = 873C03602E3D7AB7001527C1 /* CatsApp */;
 		};
 		0ADC699C2E8ED52B003E1CDB /* Exceptions for "CatsApp" folder in "CatsAppUITests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Secrets.xcconfig,
+				Resources/Secrets.xcconfig,
+			);
+			target = 873C037A2E3D7AB8001527C1 /* CatsAppUITests */;
+		};
+		0AF5BA0A2E8F3E660018B70C /* Exceptions for "CatsAppTests" folder in "CatsApp" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				CatsAppTests.swift,
+			);
+			target = 873C03602E3D7AB7001527C1 /* CatsApp */;
+		};
+		0AF5BA0B2E8F3E660018B70C /* Exceptions for "CatsAppTests" folder in "CatsAppTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				CatsAppTests.swift,
+			);
+			target = 873C03702E3D7AB8001527C1 /* CatsAppTests */;
+		};
+		0AF5BA112E8F3E690018B70C /* Exceptions for "CatsAppUITests" folder in "CatsApp" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				CatsAppUITests.swift,
+				CatsAppUITestsLaunchTests.swift,
+			);
+			target = 873C03602E3D7AB7001527C1 /* CatsApp */;
+		};
+		0AF5BA122E8F3E690018B70C /* Exceptions for "CatsAppUITests" folder in "CatsAppUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				CatsAppUITests.swift,
+				CatsAppUITestsLaunchTests.swift,
 			);
 			target = 873C037A2E3D7AB8001527C1 /* CatsAppUITests */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		0ADC69672E8E7CB0003E1CDB /* Assets */ = {
+		0AF5BA082E8F3E660018B70C /* CatsAppTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				0ADC696A2E8E7CB0003E1CDB /* Exceptions for "Assets" folder in "CatsApp" target */,
-				0ADC696B2E8E7CB0003E1CDB /* Exceptions for "Assets" folder in "CatsAppUITests" target */,
+				0AF5BA0A2E8F3E660018B70C /* Exceptions for "CatsAppTests" folder in "CatsApp" target */,
+				0AF5BA0B2E8F3E660018B70C /* Exceptions for "CatsAppTests" folder in "CatsAppTests" target */,
 			);
-			path = Assets;
+			path = CatsAppTests;
+			sourceTree = "<group>";
+		};
+		0AF5BA0E2E8F3E690018B70C /* CatsAppUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				0AF5BA112E8F3E690018B70C /* Exceptions for "CatsAppUITests" folder in "CatsApp" target */,
+				0AF5BA122E8F3E690018B70C /* Exceptions for "CatsAppUITests" folder in "CatsAppUITests" target */,
+			);
+			path = CatsAppUITests;
 			sourceTree = "<group>";
 		};
 		873C03632E3D7AB7001527C1 /* CatsApp */ = {
@@ -96,16 +119,6 @@
 				0ADC699C2E8ED52B003E1CDB /* Exceptions for "CatsApp" folder in "CatsAppUITests" target */,
 			);
 			path = CatsApp;
-			sourceTree = "<group>";
-		};
-		873C03742E3D7AB8001527C1 /* CatsAppTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = CatsAppTests;
-			sourceTree = "<group>";
-		};
-		873C037E2E3D7AB8001527C1 /* CatsAppUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = CatsAppUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -151,13 +164,20 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		0AF5BA132E8F3E700018B70C /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				0AF5BA082E8F3E660018B70C /* CatsAppTests */,
+				0AF5BA0E2E8F3E690018B70C /* CatsAppUITests */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
 		873C03582E3D7AB7001527C1 = {
 			isa = PBXGroup;
 			children = (
 				873C03632E3D7AB7001527C1 /* CatsApp */,
-				0ADC69672E8E7CB0003E1CDB /* Assets */,
-				873C03742E3D7AB8001527C1 /* CatsAppTests */,
-				873C037E2E3D7AB8001527C1 /* CatsAppUITests */,
+				0AF5BA132E8F3E700018B70C /* Tests */,
 				0ADC69812E8ED1BF003E1CDB /* Frameworks */,
 				873C03622E3D7AB7001527C1 /* Products */,
 			);
@@ -210,6 +230,8 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				0AF5BA082E8F3E660018B70C /* CatsAppTests */,
+				0AF5BA0E2E8F3E690018B70C /* CatsAppUITests */,
 				873C03632E3D7AB7001527C1 /* CatsApp */,
 			);
 			name = CatsApp;
@@ -232,9 +254,6 @@
 			dependencies = (
 				873C03732E3D7AB8001527C1 /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				873C03742E3D7AB8001527C1 /* CatsAppTests */,
-			);
 			name = CatsAppTests;
 			packageProductDependencies = (
 			);
@@ -254,10 +273,6 @@
 			);
 			dependencies = (
 				873C037D2E3D7AB8001527C1 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				0ADC69672E8E7CB0003E1CDB /* Assets */,
-				873C037E2E3D7AB8001527C1 /* CatsAppUITests */,
 			);
 			name = CatsAppUITests;
 			packageProductDependencies = (
@@ -457,7 +472,7 @@
 		873C03832E3D7AB8001527C1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = 873C03632E3D7AB7001527C1 /* CatsApp */;
-			baseConfigurationReferenceRelativePath = Secrets.xcconfig;
+			baseConfigurationReferenceRelativePath = Resources/Secrets.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -580,17 +595,17 @@
 		873C03862E3D7AB8001527C1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = 873C03632E3D7AB7001527C1 /* CatsApp */;
-			baseConfigurationReferenceRelativePath = Secrets.xcconfig;
+			baseConfigurationReferenceRelativePath = Resources/Secrets.xcconfig;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Assets\"";
+				DEVELOPMENT_ASSET_PATHS = "$(SRCROOT)/CatsApp/Resources";
 				DEVELOPMENT_TEAM = 6J895MLH96;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = CatsApp/Info.plist;
+				INFOPLIST_FILE = CatsApp/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -616,11 +631,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Assets\"";
+				DEVELOPMENT_ASSET_PATHS = "$(SRCROOT)/CatsApp/Resources";
 				DEVELOPMENT_TEAM = 6J895MLH96;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = CatsApp/Info.plist;
+				INFOPLIST_FILE = CatsApp/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
