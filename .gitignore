@@ -56,3 +56,9 @@ Secrets.xcconfig
 # Misc
 # ==========================
 *.env
+
+# ==========================
+# Xcode Info.plist files
+# ==========================
+*.plist
+!LaunchScreen.storyboard
