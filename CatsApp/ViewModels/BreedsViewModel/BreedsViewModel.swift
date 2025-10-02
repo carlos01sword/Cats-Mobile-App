@@ -78,7 +78,7 @@ final class BreedsViewModel: ObservableObject {
     func shouldLoadMore(after breed: CatBreed) -> Bool {
         guard searchText.isEmpty,
               canLoadMore,
-              !isLoading,                   
+              !isLoading,
               let last = filteredBreeds.last, last.id == breed.id else { return false }
         return true
     }
