@@ -10,7 +10,7 @@ import SwiftData
 
 struct FavoritesView: View {
     @Environment(\.modelContext) private var context
-    @EnvironmentObject private var viewModel: CatListViewModel
+    @EnvironmentObject private var viewModel: BreedsViewModel
     @State private var selectedBreed: CatBreed?
     
     var body: some View {
@@ -45,7 +45,7 @@ struct FavoritesView: View {
 #Preview {
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
     let container = try! ModelContainer(for: CatBreed.self, configurations: config)
-    let vm = CatListViewModel()
+    let vm = BreedsViewModel()
     if let sample = MockData.sampleBreed as CatBreed? { 
         sample.isFavorite = true
         vm.catBreeds = [sample]

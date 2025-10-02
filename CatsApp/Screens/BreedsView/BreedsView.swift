@@ -8,9 +8,9 @@
 import SwiftData
 import SwiftUI
 
-struct CatDataView: View {
+struct BreedsView: View {
     @Environment(\.modelContext) private var context
-    @EnvironmentObject private var viewModel: CatListViewModel
+    @EnvironmentObject private var viewModel: BreedsViewModel
     @State private var selectedBreed: CatBreed?
 
     var body: some View {
@@ -33,15 +33,8 @@ struct CatDataView: View {
                                 )
                             }
                             .onAppear {
-                                guard viewModel.searchText.isEmpty else {
-                                    return
-                                }
-                                if breed == viewModel.filteredBreeds.last {
-                                    Task {
-                                        await viewModel.loadMore(
-                                            context: context
-                                        )
-                                    }
+                                if viewModel.shouldLoadMore(after: breed) {
+                                    Task { await viewModel.loadMore(context: context) }
                                 }
                             }
                             .contentShape(Rectangle())
@@ -74,7 +67,7 @@ struct CatDataView: View {
 }
 
 #Preview {
-    CatDataView()
+    BreedsView()
         .modelContainer(for: CatBreed.self, inMemory: true)
-        .environmentObject(CatListViewModel())
+        .environmentObject(BreedsViewModel())
 }

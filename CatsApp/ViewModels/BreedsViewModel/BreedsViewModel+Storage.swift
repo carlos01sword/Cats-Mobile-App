@@ -7,9 +7,9 @@
 
 import SwiftData
 
-extension CatListViewModel {
+extension BreedsViewModel {
     
-    func storeBreeds(_ apiBreeds: [CatDataService.CatBreed], in context: ModelContext) async {
+    func storeBreeds(_ apiBreeds: [BreedsDataService.CatBreed], in context: ModelContext) async {
         var insertedNewBreeds = false
         
         for apiBreed in apiBreeds {

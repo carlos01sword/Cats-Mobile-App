@@ -10,7 +10,7 @@ import SwiftUI
 
 @main
 struct CatsAppApp: App {
-    @StateObject private var viewModel = CatListViewModel()
+    @StateObject private var viewModel = BreedsViewModel()
     var body: some Scene {
         WindowGroup {
             BreedTabView()

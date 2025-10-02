@@ -29,7 +29,35 @@
 		873C037B2E3D7AB8001527C1 /* CatsAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CatsAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		0ADC696A2E8E7CB0003E1CDB /* Exceptions for "Assets" folder in "CatsApp" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Assets.xcassets,
+				"Preview Assets.xcassets",
+			);
+			target = 873C03602E3D7AB7001527C1 /* CatsApp */;
+		};
+		0ADC696B2E8E7CB0003E1CDB /* Exceptions for "Assets" folder in "CatsAppUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Assets.xcassets,
+				"Preview Assets.xcassets",
+			);
+			target = 873C037A2E3D7AB8001527C1 /* CatsAppUITests */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		0ADC69672E8E7CB0003E1CDB /* Assets */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				0ADC696A2E8E7CB0003E1CDB /* Exceptions for "Assets" folder in "CatsApp" target */,
+				0ADC696B2E8E7CB0003E1CDB /* Exceptions for "Assets" folder in "CatsAppUITests" target */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
 		873C03632E3D7AB7001527C1 /* CatsApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = CatsApp;
@@ -76,6 +104,7 @@
 			isa = PBXGroup;
 			children = (
 				873C03632E3D7AB7001527C1 /* CatsApp */,
+				0ADC69672E8E7CB0003E1CDB /* Assets */,
 				873C03742E3D7AB8001527C1 /* CatsAppTests */,
 				873C037E2E3D7AB8001527C1 /* CatsAppUITests */,
 				873C03622E3D7AB7001527C1 /* Products */,
@@ -154,6 +183,7 @@
 				873C037D2E3D7AB8001527C1 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
+				0ADC69672E8E7CB0003E1CDB /* Assets */,
 				873C037E2E3D7AB8001527C1 /* CatsAppUITests */,
 			);
 			name = CatsAppUITests;
@@ -397,7 +427,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"CatsApp/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Assets\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -425,7 +455,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"CatsApp/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Assets\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

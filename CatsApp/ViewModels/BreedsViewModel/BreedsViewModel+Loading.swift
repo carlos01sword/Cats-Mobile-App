@@ -8,40 +8,34 @@
 import Foundation
 import SwiftData
 
-extension CatListViewModel {
+extension BreedsViewModel {
     
     func loadInitial(context: ModelContext) async {
         guard catBreeds.isEmpty else { return }
-
-        currentPage = 0
-        canLoadMore = true
-        catBreeds = []
-
+        resetPaging()
+        transition(to: .initialLoading)
         await loadPage(context: context, isInitial: true)
     }
 
     func loadMore(context: ModelContext) async {
         guard !isLoading, canLoadMore else { return }
+        if phase != .initialLoading { transition(to: .pageLoading) }
         await loadPage(context: context, isInitial: false)
     }
 
     private func loadPage(context: ModelContext, isInitial: Bool) async {
-        isLoading = true
-        defer { isLoading = false }
-
-        let service = CatDataService()
-        let result = await service.fetchCatsData(page: currentPage, limit: pageSize)
-
+        let result = await fetchPage(page: currentPage, limit: pageSize)
         switch result {
         case .success(let apiBreeds):
-            if apiBreeds.isEmpty {
-                canLoadMore = false
-            } else {
-                currentPage += 1
-                await storeBreeds(apiBreeds, in: context)
+            guard !apiBreeds.isEmpty else {
+                transition(to: .endReached)
+                return
             }
-
+            advancePage()
+            await storeBreeds(apiBreeds, in: context)
+            transition(to: apiBreeds.count < pageSize ? .endReached : .idle)
         case .failure(let error):
+            transition(to: .error(error.localizedDescription))
             await handleFetchFailure(error, context: context)
         }
     }

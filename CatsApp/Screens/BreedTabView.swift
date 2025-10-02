@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct BreedTabView: View {
-    @EnvironmentObject private var viewModel: CatListViewModel
+    @EnvironmentObject private var viewModel: BreedsViewModel
         
     var body: some View {
         TabView {
-            CatDataView()
+            BreedsView()
                 .tabItem { Label("All Breeds", systemImage: "list.bullet") }
             FavoritesView()
                 .tabItem { Label("Favorites", systemImage: "star.fill") }
@@ -23,5 +23,5 @@ struct BreedTabView: View {
 #Preview {
     BreedTabView()
         .modelContainer(for: CatBreed.self, inMemory: true)
-        .environmentObject(CatListViewModel())
+        .environmentObject(BreedsViewModel())
 }
