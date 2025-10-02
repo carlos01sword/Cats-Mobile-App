@@ -60,3 +60,12 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
+
+
+# Secrets and configuration
+Secrets/
+*.xcconfig
+
+# Derived data and build outputs
+DerivedData/
+build/
