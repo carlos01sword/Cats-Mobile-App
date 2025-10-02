@@ -54,7 +54,7 @@ struct BreedsView: View {
                 Text(viewModel.fetchErrorMessage ?? "")
             }
             .task {
-                await viewModel.refreshBreeds(from: context)
+                viewModel.loadCachedIfAvailable(context: context)
                 if viewModel.catBreeds.isEmpty {
                     await viewModel.loadInitial(context: context)
                 }

@@ -9,7 +9,6 @@ import Foundation
 import SwiftData
 
 extension BreedsViewModel {
-    
     func loadInitial(context: ModelContext) async {
         guard catBreeds.isEmpty else { return }
         resetPaging()
@@ -24,16 +23,18 @@ extension BreedsViewModel {
     }
 
     private func loadPage(context: ModelContext, isInitial: Bool) async {
-        let result = await fetchPage(page: currentPage, limit: pageSize)
+        let result = await repository.fetchPage(page: currentPage, limit: pageSize, context: context)
         switch result {
-        case .success(let apiBreeds):
-            guard !apiBreeds.isEmpty else {
+        case .success(let pageResult):
+            let fetchedCount = pageResult.fetchedCount
+            catBreeds = pageResult.breeds
+            guard fetchedCount > 0 else {
                 transition(to: .endReached)
                 return
             }
             advancePage()
-            await storeBreeds(apiBreeds, in: context)
-            transition(to: apiBreeds.count < pageSize ? .endReached : .idle)
+            let reachedEnd = fetchedCount < pageSize
+            transition(to: reachedEnd ? .endReached : .idle)
         case .failure(let error):
             transition(to: .error(error.localizedDescription))
             await handleFetchFailure(error, context: context)

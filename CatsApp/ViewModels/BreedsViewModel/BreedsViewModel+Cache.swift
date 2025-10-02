@@ -8,7 +8,6 @@
 import SwiftData
 
 extension BreedsViewModel {
-    
     func handleFetchFailure(_ error: Error, context: ModelContext) async {
         let hadDataBefore = !catBreeds.isEmpty
         let loadedFromCache = await loadCachedBreeds(from: context)
@@ -16,24 +15,29 @@ extension BreedsViewModel {
             transition(to: .endReached)
         } else if !hadDataBefore {
             transition(to: .error(error.localizedDescription))
-        } else {
-            if phase == .pageLoading { transition(to: .idle) }
+        } else if phase == .pageLoading {
+            transition(to: .idle)
         }
     }
 
     @discardableResult
     private func loadCachedBreeds(from context: ModelContext) async -> Bool {
-        let descriptor = FetchDescriptor<CatBreed>()
         do {
-            let saved = try context.fetch(descriptor)
-            if !saved.isEmpty {
-                catBreeds = saved.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
-                return true
-            }
-            return false
+            let saved = try repository.fetchAll(context: context)
+            guard !saved.isEmpty else { return false }
+            catBreeds = saved
+            return true
         } catch {
-            print("Cache fetch error: \(error.localizedDescription)")
+            print("Cache fetch error: \(error)")
             return false
+        }
+    }
+    
+    func loadCachedIfAvailable(context: ModelContext) {
+        guard catBreeds.isEmpty else { return }
+        if let saved = try? repository.fetchAll(context: context), !saved.isEmpty {
+            catBreeds = saved
+            if phase == .idle { } else { transition(to: .idle) }
         }
     }
 }
