@@ -13,7 +13,7 @@ enum LoadPhase: Equatable {
     case initialLoading
     case pageLoading
     case endReached
-    case error(String)
+    case error(DomainError)
 }
 
 @MainActor
@@ -37,7 +37,7 @@ final class BreedsViewModel: ObservableObject {
     // Derived state
     var isLoading: Bool { phase == .initialLoading || phase == .pageLoading }
     var canLoadMore: Bool { !(phase == .endReached) && !(phase.isTerminalError) }
-    var fetchErrorMessage: String? { if case .error(let msg) = phase { return msg } else { return nil } }
+    var fetchErrorMessage: String? { if case .error(let err) = phase { return err.errorDescription } else { return nil } }
 
     var filteredBreeds: [CatBreed] {
         searchText.isEmpty

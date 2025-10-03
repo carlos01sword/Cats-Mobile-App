@@ -35,9 +35,9 @@ extension BreedsViewModel {
             advancePage()
             let reachedEnd = fetchedCount < pageSize
             transition(to: reachedEnd ? .endReached : .idle)
-        case .failure(let error):
-            transition(to: .error(error.localizedDescription))
-            await handleFetchFailure(error, context: context)
+        case .failure(let domainError):
+            transition(to: .error(domainError))
+            await handleFetchFailure(domainError, context: context)
         }
     }
 }

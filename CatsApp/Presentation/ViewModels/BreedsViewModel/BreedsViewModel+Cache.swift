@@ -8,13 +8,13 @@
 import SwiftData
 
 extension BreedsViewModel {
-    func handleFetchFailure(_ error: Error, context: ModelContext) async {
+    func handleFetchFailure(_ error: DomainError, context: ModelContext) async {
         let hadDataBefore = !catBreeds.isEmpty
         let loadedFromCache = await loadCachedBreeds(from: context)
         if loadedFromCache {
             transition(to: .endReached)
         } else if !hadDataBefore {
-            transition(to: .error(error.localizedDescription))
+            transition(to: .error(error))
         } else if phase == .pageLoading {
             transition(to: .idle)
         }
@@ -27,6 +27,9 @@ extension BreedsViewModel {
             guard !saved.isEmpty else { return false }
             catBreeds = saved
             return true
+        } catch let domainError as DomainError {
+            print("Cache fetch error: \(domainError)")
+            return false
         } catch {
             print("Cache fetch error: \(error)")
             return false

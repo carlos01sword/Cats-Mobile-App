@@ -3,9 +3,11 @@ import SwiftData
 
 protocol BreedsRepositoryProtocol {
     @MainActor
-    func fetchPage(page: Int, limit: Int, context: ModelContext) async -> Result<PageResult, Error>
+    func fetchPage(page: Int, limit: Int, context: ModelContext) async
+        -> Result<PageResult, DomainError>
     @MainActor
-    func savePage(_ dtos: [BreedsDataService.CatBreed], context: ModelContext) async throws -> [CatBreed]
+    func savePage(_ dtos: [BreedsDataService.CatBreed], context: ModelContext)
+        async throws -> [CatBreed]
     @MainActor
     func toggleFavorite(_ breed: CatBreed, context: ModelContext) throws
     @MainActor
@@ -27,28 +29,46 @@ struct BreedsRepository: BreedsRepositoryProtocol {
     }
 
     @MainActor
-    func fetchPage(page: Int, limit: Int, context: ModelContext) async -> Result<PageResult, Error> {
-        let networkResult = await service.fetchCatsData(page: page, limit: limit)
+    func fetchPage(page: Int, limit: Int, context: ModelContext) async
+        -> Result<PageResult, DomainError>
+    {
+        let networkResult = await service.fetchCatsData(
+            page: page,
+            limit: limit
+        )
         switch networkResult {
         case .success(let dtos):
             let count = dtos.count
             do {
+                
                 let saved = try await savePage(dtos, context: context)
                 return .success(PageResult(breeds: saved, fetchedCount: count))
-            } catch {
+                
+            } catch let error as DomainError {
                 return .failure(error)
+            } catch {
+                return .failure(.persistenceError)
             }
-        case .failure(let error):
-            return .failure(error)
+        case .failure:
+            return .failure(.networkError)
         }
     }
 
     @MainActor
-    func savePage(_ dtos: [BreedsDataService.CatBreed], context: ModelContext) async throws -> [CatBreed] {
+    func savePage(_ dtos: [BreedsDataService.CatBreed], context: ModelContext)
+        async throws -> [CatBreed]
+    {
         guard !dtos.isEmpty else { return try fetchAll(context: context) }
 
         let existingDescriptor = FetchDescriptor<CatBreed>()
-        let existing = (try? context.fetch(existingDescriptor)) ?? []
+        
+        let existing: [CatBreed]
+        do {
+            existing = try context.fetch(existingDescriptor)
+        } catch {
+            throw DomainError.persistenceError
+        }
+        
         var existingIds = Set(existing.map { $0.id })
 
         var inserted = false
@@ -68,30 +88,54 @@ struct BreedsRepository: BreedsRepositoryProtocol {
             existingIds.insert(dto.id)
             inserted = true
         }
-        if inserted { try? context.save() }
+        if inserted {
+            do {
+                try context.save()
+            } catch {
+                throw DomainError.persistenceError
+            }
+        }
 
-        let all = (try? context.fetch(existingDescriptor)) ?? []
-        return all.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+        do{
+            let all = try context.fetch(existingDescriptor)
+            return CatBreed.sortedByName(all)
+        } catch {
+            throw DomainError.persistenceError
+        }
     }
 
     @MainActor
     func toggleFavorite(_ breed: CatBreed, context: ModelContext) throws {
         breed.isFavorite.toggle()
-        try? context.save()
+        do {
+            try context.save()
+        } catch {
+            throw DomainError.persistenceError
+        }
+         
     }
 
     @MainActor
     func fetchFavorites(context: ModelContext) throws -> [CatBreed] {
         let predicate = #Predicate<CatBreed> { $0.isFavorite == true }
         let descriptor = FetchDescriptor<CatBreed>(predicate: predicate)
-        let favorites = try context.fetch(descriptor)
-        return favorites.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+        
+        do {
+            let favorites = try context.fetch(descriptor)
+            return CatBreed.sortedByName(favorites)
+        } catch {
+            throw DomainError.persistenceError
+        }
     }
 
     @MainActor
     func fetchAll(context: ModelContext) throws -> [CatBreed] {
         let descriptor = FetchDescriptor<CatBreed>()
-        let all = try context.fetch(descriptor)
-        return all.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+        do{
+            let all = try context.fetch(descriptor)
+            return CatBreed.sortedByName(all)
+        } catch{
+            throw DomainError.persistenceError
+        }
     }
 }
