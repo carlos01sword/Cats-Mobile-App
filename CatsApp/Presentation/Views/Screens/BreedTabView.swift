@@ -8,20 +8,21 @@
 import SwiftUI
 
 struct BreedTabView: View {
-    @EnvironmentObject private var viewModel: BreedsViewModel
-        
+    @EnvironmentObject private var favoritesState: FavoritesState
+    
     var body: some View {
         TabView {
-            BreedsView()
+            BreedsView(favoritesState: favoritesState)
                 .tabItem { Label("All Breeds", systemImage: "list.bullet") }
-            FavoritesView()
+            FavoritesView(favoritesState: favoritesState)
                 .tabItem { Label("Favorites", systemImage: "star.fill") }
         }
     }
 }
 
 #Preview {
+    let favoritesState = FavoritesState()
     BreedTabView()
         .modelContainer(for: CatBreed.self, inMemory: true)
-        .environmentObject(BreedsViewModel())
+        .environmentObject(favoritesState)
 }

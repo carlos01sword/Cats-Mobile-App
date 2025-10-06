@@ -10,15 +10,18 @@ import SwiftUI
 
 struct BreedsView: View {
     @Environment(\.modelContext) private var context
-    @EnvironmentObject private var viewModel: BreedsViewModel
+    @EnvironmentObject private var favoritesState: FavoritesState
+    @StateObject private var viewModel: BreedsViewModel
     @State private var selectedBreed: CatBreed?
+
+    init(favoritesState: FavoritesState) {
+        _viewModel = StateObject(wrappedValue: BreedsViewModel(favoritesState: favoritesState))
+    }
 
     var body: some View {
         NavigationStack {
             Group {
-                if !viewModel.searchText.isEmpty
-                    && viewModel.filteredBreeds.isEmpty
-                {
+                if !viewModel.searchText.isEmpty && viewModel.filteredBreeds.isEmpty {
                     SearchEmptyStateView(searchText: viewModel.searchText)
                 } else {
                     BreedListView(
@@ -27,10 +30,7 @@ struct BreedsView: View {
                     ) { breed in
                         AnyView(
                             BreedRowView(breed: breed) {
-                                viewModel.toggleFavorite(
-                                    for: breed,
-                                    context: context
-                                )
+                                viewModel.favoritesState.toggleFavorite(for: breed, context: context)
                             }
                             .onAppear {
                                 if viewModel.shouldLoadMore(after: breed) {
@@ -61,13 +61,14 @@ struct BreedsView: View {
             }
         }
         .sheet(item: $selectedBreed) { breed in
-            DetailsView(breed: breed)
+            DetailsView(breed: breed, favoritesState: favoritesState)
         }
     }
 }
 
 #Preview {
-    BreedsView()
+    let favoritesState = FavoritesState()
+    BreedsView(favoritesState: favoritesState)
         .modelContainer(for: CatBreed.self, inMemory: true)
-        .environmentObject(BreedsViewModel())
+        .environmentObject(favoritesState)
 }

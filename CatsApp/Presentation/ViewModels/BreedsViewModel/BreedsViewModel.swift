@@ -19,16 +19,18 @@ enum LoadPhase: Equatable {
 @MainActor
 final class BreedsViewModel: ObservableObject {
     let repository: BreedsRepositoryProtocol
+    let favoritesState: FavoritesState
     
     @Published var catBreeds: [CatBreed] = []
     @Published var searchText: String = ""
     @Published private(set) var phase: LoadPhase = .idle
 
-    private(set) var currentPage = 0
+    var currentPage = 0
     let pageSize = 10
     
-    init(repository: BreedsRepositoryProtocol = BreedsRepository()) {
+    init(repository: BreedsRepositoryProtocol = BreedsRepository(), favoritesState: FavoritesState) {
         self.repository = repository
+        self.favoritesState = favoritesState
     }
     
     func resetPaging() { currentPage = 0 }
@@ -45,11 +47,8 @@ final class BreedsViewModel: ObservableObject {
             : catBreeds.filter { $0.name.lowercased().contains(searchText.lowercased()) }
     }
 
-    var favoriteBreeds: [CatBreed] { catBreeds.filter(\.isFavorite) }
-
-    func toggleFavorite(for breed: CatBreed, context: ModelContext) {
-        try? repository.toggleFavorite(breed, context: context)
-    }
+    //FavoritesState for favorite breeds
+    var favoriteBreeds: [CatBreed] { favoritesState.favorites }
     
     func transition(to newPhase: LoadPhase) { phase = newPhase }
     
