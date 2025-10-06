@@ -25,28 +25,17 @@ struct FavoritesView: View {
             } else {
                 BreedListView(
                     breeds: viewModel.favoriteBreeds,
-                    header: AverageTabView(breeds: viewModel.favoriteBreeds)
-                ) { breed in
-                    AnyView(
-                        BreedRowView(breed: breed, onFavoriteTapped: {
-                            viewModel.toggleFavorite(for: breed, context: context)
-                        })
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            selectedBreed = breed
-                        }
-                        .buttonStyle(PlainButtonStyle())
-                    )
-                }
+                    header: AverageTabView(breeds: viewModel.favoriteBreeds),
+                    onSelect: { selectedBreed = $0 },
+                    onFavorite: { viewModel.toggleFavorite(for: $0, context: context) }
+                )
                 .navigationTitle("Favorites")
             }
         }
         .sheet(item: $selectedBreed) { breed in
             DetailsView(breed: breed, favoritesState: favoritesState)
         }
-        .onAppear {
-            favoritesState.loadFavorites(context: context)
-        }
+        .onAppear { favoritesState.loadFavorites(context: context) }
     }
 }
 
