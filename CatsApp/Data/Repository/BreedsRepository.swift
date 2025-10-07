@@ -3,8 +3,7 @@ import SwiftData
 
 protocol BreedsRepositoryProtocol {
     @MainActor
-    func fetchPage(page: Int, limit: Int, context: ModelContext) async
-        -> Result<PageResult, DomainError>
+    func fetchPage(page: Int, limit: Int, context: ModelContext) async throws -> PageResult
     @MainActor
     func savePage(_ dtos: [BreedsDataService.CatBreed], context: ModelContext)
         async throws -> [CatBreed]
@@ -29,28 +28,19 @@ struct BreedsRepository: BreedsRepositoryProtocol {
     }
 
     @MainActor
-    func fetchPage(page: Int, limit: Int, context: ModelContext) async
-        -> Result<PageResult, DomainError>
-    {
-        let networkResult = await service.fetchCatsData(
-            page: page,
-            limit: limit
-        )
-        switch networkResult {
-        case .success(let dtos):
+    func fetchPage(page: Int, limit: Int, context: ModelContext) async throws -> PageResult {
+        do {
+            let dtos = try await service.fetchCatsData(
+                page: page,
+                limit: limit
+            )
             let count = dtos.count
-            do {
-                
-                let saved = try await savePage(dtos, context: context)
-                return .success(PageResult(breeds: saved, fetchedCount: count))
-                
-            } catch let error as DomainError {
-                return .failure(error)
-            } catch {
-                return .failure(.persistenceError)
-            }
-        case .failure:
-            return .failure(.networkError)
+            let saved = try await savePage(dtos, context: context)
+            return PageResult(breeds: saved, fetchedCount: count)
+        } catch let error as DomainError {
+            throw error
+        } catch {
+            throw DomainError.networkError
         }
     }
 

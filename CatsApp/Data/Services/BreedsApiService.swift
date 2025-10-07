@@ -8,7 +8,7 @@
 import Foundation
 
 protocol BreedsFetching {
-    func fetchCatsData(page: Int, limit: Int) async -> Result<[BreedsDataService.CatBreed], Error>
+    func fetchCatsData(page: Int, limit: Int) async throws -> [BreedsDataService.CatBreed]
 }
 
 struct BreedsDataService: BreedsFetching {
@@ -35,7 +35,7 @@ struct BreedsDataService: BreedsFetching {
         }
     }
     
-    func fetchCatsData(page: Int = 0, limit: Int = 10) async -> Result<[CatBreed], Error> {
+    func fetchCatsData(page: Int = 0, limit: Int = 10) async throws -> [CatBreed] {
         let endpoint = Endpoint(
             path: "breeds",
             queryItems: [
@@ -43,7 +43,11 @@ struct BreedsDataService: BreedsFetching {
                 URLQueryItem(name: "limit", value: String(limit))
             ]
         )
-        let result: Result<[CatBreed], NetworkError> = await client.request(endpoint)
-        return result.mapError { $0 as Error }
+        do {
+            let breeds: [CatBreed] = try await client.request(endpoint)
+            return breeds
+        } catch {
+            throw error
+        }
     }
 }
