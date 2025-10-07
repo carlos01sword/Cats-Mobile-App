@@ -3,21 +3,35 @@ import SwiftData
 
 @MainActor
 final class FavoritesViewModel: ObservableObject {
-    let favoritesState: FavoritesState
+    @Published private(set) var favorites: [CatBreed] = []
+    private let repository: BreedsRepositoryProtocol
     
-    init(favoritesState: FavoritesState) {
-        self.favoritesState = favoritesState
+    init(repository: BreedsRepositoryProtocol = BreedsRepository()) {
+        self.repository = repository
     }
     
     var favoriteBreeds: [CatBreed] {
-        favoritesState.favorites
+        favorites
     }
     
     func toggleFavorite(for breed: CatBreed, context: ModelContext) {
-        favoritesState.toggleFavorite(for: breed, context: context)
+        do {
+            try repository.toggleFavorite(breed, context: context)
+            loadFavorites(context: context)
+        } catch {
+            print("Failed to toggle favorite: \(error)")
+        }
     }
     
     func isFavorite(_ breed: CatBreed) -> Bool {
-        favoritesState.isFavorite(breed)
+        favorites.contains(where: { $0.id == breed.id })
+    }
+    
+    func loadFavorites(context: ModelContext) {
+        do {
+            favorites = try repository.fetchFavorites(context: context)
+        } catch {
+            favorites = []
+        }
     }
 }

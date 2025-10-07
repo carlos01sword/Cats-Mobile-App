@@ -4,20 +4,20 @@ import SwiftUI
 
 @MainActor
 final class DetailsViewModel: ObservableObject {
-    let favoritesState: FavoritesState
+    let favoritesViewModel: FavoritesViewModel
     let breed: CatBreed
     
-    init(breed: CatBreed, favoritesState: FavoritesState) {
+    init(breed: CatBreed, favoritesViewModel: FavoritesViewModel) {
         self.breed = breed
-        self.favoritesState = favoritesState
+        self.favoritesViewModel = favoritesViewModel
     }
     
     func toggleFavorite(context: ModelContext) {
-        favoritesState.toggleFavorite(for: breed, context: context)
+        favoritesViewModel.toggleFavorite(for: breed, context: context)
     }
     
     var isFavorite: Bool {
-        favoritesState.isFavorite(breed)
+        favoritesViewModel.isFavorite(breed)
     }
     
     var name: String { breed.name }

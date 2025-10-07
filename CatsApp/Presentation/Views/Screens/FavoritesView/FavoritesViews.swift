@@ -10,13 +10,8 @@ import SwiftData
 
 struct FavoritesView: View {
     @Environment(\.modelContext) private var context
-    @EnvironmentObject private var favoritesState: FavoritesState
-    @StateObject private var viewModel: FavoritesViewModel
+    @EnvironmentObject private var viewModel: FavoritesViewModel
     @State private var selectedBreed: CatBreed?
-
-    init(favoritesState: FavoritesState) {
-        _viewModel = StateObject(wrappedValue: FavoritesViewModel(favoritesState: favoritesState))
-    }
 
     var body: some View {
         NavigationStack {
@@ -33,15 +28,14 @@ struct FavoritesView: View {
             }
         }
         .sheet(item: $selectedBreed) { breed in
-            DetailsView(breed: breed, favoritesState: favoritesState)
+            DetailsView(breed: breed, favoritesViewModel: viewModel)
         }
-        .onAppear { favoritesState.loadFavorites(context: context) }
+        .onAppear { viewModel.loadFavorites(context: context) }
     }
 }
 
 #Preview {
-    let favoritesState = FavoritesState()
-    FavoritesView(favoritesState: favoritesState)
+    FavoritesView()
         .modelContainer(for: CatBreed.self, inMemory: true)
-        .environmentObject(favoritesState)
+        .environmentObject(FavoritesViewModel())
 }

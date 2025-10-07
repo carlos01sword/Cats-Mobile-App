@@ -10,12 +10,12 @@ import SwiftUI
 
 struct BreedsView: View {
     @Environment(\.modelContext) private var context
-    @EnvironmentObject private var favoritesState: FavoritesState
+    @EnvironmentObject private var favoritesViewModel: FavoritesViewModel
     @StateObject private var viewModel: BreedsViewModel
     @State private var selectedBreed: CatBreed?
 
-    init(favoritesState: FavoritesState) {
-        _viewModel = StateObject(wrappedValue: BreedsViewModel(favoritesState: favoritesState))
+    init(favoritesViewModel: FavoritesViewModel) {
+        _viewModel = StateObject(wrappedValue: BreedsViewModel(favoritesViewModel: FavoritesViewModel()))
     }
 
     var body: some View {
@@ -34,7 +34,7 @@ struct BreedsView: View {
                 .task { initialLoadIfNeeded() }
         }
         .sheet(item: $selectedBreed) { breed in
-            DetailsView(breed: breed, favoritesState: favoritesState)
+            DetailsView(breed: breed, favoritesViewModel: favoritesViewModel)
         }
     }
 }
@@ -48,7 +48,7 @@ private extension BreedsView {
                 BreedListView(
                     breeds: viewModel.filteredBreeds,
                     onSelect: { selectedBreed = $0 },
-                    onFavorite: { favoritesState.toggleFavorite(for: $0, context: context) },
+                    onFavorite: { favoritesViewModel.toggleFavorite(for: $0, context: context) },
                     onRowAppear: handleRowAppear
                 )
             }
@@ -73,8 +73,8 @@ private extension BreedsView {
 }
 
 #Preview {
-    let favoritesState = FavoritesState()
-    BreedsView(favoritesState: favoritesState)
+    let favoritesViewModel = FavoritesViewModel()
+    BreedsView(favoritesViewModel: favoritesViewModel)
         .modelContainer(for: CatBreed.self, inMemory: true)
-        .environmentObject(favoritesState)
+        .environmentObject(favoritesViewModel)
 }

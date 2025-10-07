@@ -19,7 +19,7 @@ enum ViewState: Equatable {
 @MainActor
 final class BreedsViewModel: ObservableObject {
     let repository: BreedsRepositoryProtocol
-    let favoritesState: FavoritesState
+    let favoritesViewModel: FavoritesViewModel
     
     @Published var catBreeds: [CatBreed] = []
     @Published var searchText: String = ""
@@ -28,9 +28,9 @@ final class BreedsViewModel: ObservableObject {
     var currentPage = 0
     let pageSize = 10
     
-    init(repository: BreedsRepositoryProtocol = BreedsRepository(), favoritesState: FavoritesState) {
+    init(repository: BreedsRepositoryProtocol = BreedsRepository(), favoritesViewModel: FavoritesViewModel) {
         self.repository = repository
-        self.favoritesState = favoritesState
+        self.favoritesViewModel = favoritesViewModel
     }
     
     func resetPaging() { currentPage = 0 }
@@ -48,7 +48,7 @@ final class BreedsViewModel: ObservableObject {
     }
 
     //FavoritesState for favorite breeds
-    var favoriteBreeds: [CatBreed] { favoritesState.favorites }
+    var favoriteBreeds: [CatBreed] { favoritesViewModel.favorites }
     
     func transition(to newPhase: ViewState) { state = newPhase }
     

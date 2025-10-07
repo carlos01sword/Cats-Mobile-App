@@ -10,12 +10,12 @@ import SwiftUI
 
 @main
 struct CatsAppApp: App {
-    @StateObject private var favoritesState = FavoritesState()
+    @StateObject private var favoritesViewModel = FavoritesViewModel()
     
     var body: some Scene {
         WindowGroup {
             BreedTabView()
-                .environmentObject(favoritesState)
+                .environmentObject(favoritesViewModel)
                 .modelContainer(for: CatBreed.self)
         }
     }

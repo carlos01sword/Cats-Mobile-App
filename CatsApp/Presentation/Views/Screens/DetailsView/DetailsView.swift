@@ -10,11 +10,11 @@ import SwiftData
 
 struct DetailsView: View {
     @Environment(\.modelContext) private var context
-    @EnvironmentObject private var favoritesState: FavoritesState
+    @EnvironmentObject private var favoritesViewModel: FavoritesViewModel
     @StateObject private var viewModel: DetailsViewModel
     
-    init(breed: CatBreed, favoritesState: FavoritesState) {
-        _viewModel = StateObject(wrappedValue: DetailsViewModel(breed: breed, favoritesState: favoritesState))
+    init(breed: CatBreed, favoritesViewModel: FavoritesViewModel) {
+        _viewModel = StateObject(wrappedValue: DetailsViewModel(breed: breed, favoritesViewModel: favoritesViewModel))
     }
 
     var body: some View {
@@ -75,8 +75,8 @@ struct DetailsView: View {
 }
 
 #Preview {
-    let favoritesState = FavoritesState()
-    DetailsView(breed: MockData.sampleBreed, favoritesState: FavoritesState())
+    let favoritesViewModel = FavoritesViewModel()
+    DetailsView(breed: MockData.sampleBreed, favoritesViewModel: FavoritesViewModel())
         .modelContainer(for: CatBreed.self, inMemory: true)
-        .environmentObject(favoritesState)
+        .environmentObject(favoritesViewModel)
 }
