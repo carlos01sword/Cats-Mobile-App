@@ -15,7 +15,7 @@ extension BreedsViewModel {
             transition(to: .endReached)
         } else if !hadDataBefore {
             transition(to: .error(error))
-        } else if phase == .pageLoading {
+        } else if state == .pageLoading {
             transition(to: .idle)
         }
     }
@@ -42,7 +42,7 @@ extension BreedsViewModel {
         if let saved = try? repository.fetchAll(context: context), !saved.isEmpty {
             catBreeds = saved
             currentPage = catBreeds.count / pageSize
-            if phase == .idle { } else { transition(to: .idle) }
+            if state == .idle { } else { transition(to: .idle) }
         }
     }
 }

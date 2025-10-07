@@ -18,7 +18,7 @@ extension BreedsViewModel {
 
     func loadMore(context: ModelContext) async {
         guard !isLoading, canLoadMore else { return }
-        if phase != .initialLoading { transition(to: .pageLoading) }
+        if state != .initialLoading { transition(to: .pageLoading) }
         await loadPage(context: context, isInitial: false)
     }
 

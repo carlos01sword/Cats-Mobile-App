@@ -8,7 +8,7 @@
 import Foundation
 import SwiftData
 
-enum LoadPhase: Equatable {
+enum ViewState: Equatable {
     case idle
     case initialLoading
     case pageLoading
@@ -23,7 +23,7 @@ final class BreedsViewModel: ObservableObject {
     
     @Published var catBreeds: [CatBreed] = []
     @Published var searchText: String = ""
-    @Published private(set) var phase: LoadPhase = .idle
+    @Published private(set) var state: ViewState = .idle
 
     var currentPage = 0
     let pageSize = 10
@@ -37,9 +37,9 @@ final class BreedsViewModel: ObservableObject {
     func advancePage() { currentPage += 1 }
     
     // Derived state
-    var isLoading: Bool { phase == .initialLoading || phase == .pageLoading }
-    var canLoadMore: Bool { !(phase == .endReached) && !(phase.isTerminalError) }
-    var fetchErrorMessage: String? { if case .error(let err) = phase { return err.errorDescription } else { return nil } }
+    var isLoading: Bool { state == .initialLoading || state == .pageLoading }
+    var canLoadMore: Bool { !(state == .endReached) && !(state.isTerminalError) }
+    var fetchErrorMessage: String? { if case .error(let err) = state { return err.errorDescription } else { return nil } }
 
     var filteredBreeds: [CatBreed] {
         searchText.isEmpty
@@ -50,7 +50,7 @@ final class BreedsViewModel: ObservableObject {
     //FavoritesState for favorite breeds
     var favoriteBreeds: [CatBreed] { favoritesState.favorites }
     
-    func transition(to newPhase: LoadPhase) { phase = newPhase }
+    func transition(to newPhase: ViewState) { state = newPhase }
     
     func shouldLoadMore(after breed: CatBreed) -> Bool {
         guard searchText.isEmpty,
@@ -61,6 +61,6 @@ final class BreedsViewModel: ObservableObject {
     }
 }
 
-private extension LoadPhase {
+private extension ViewState {
     var isTerminalError: Bool { if case .error = self { return true } else { return false } }
 }

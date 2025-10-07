@@ -2,7 +2,7 @@ import Foundation
 import SwiftData
 
 @MainActor
-final class FavoritesState: ObservableObject{
+final class FavoritesState: ObservableObject {
     @Published private(set) var favorites: [CatBreed] = []
     private let repository: BreedsRepositoryProtocol
     
