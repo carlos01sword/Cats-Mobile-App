@@ -19,7 +19,7 @@ enum NetworkError: Error, CustomStringConvertible {
 }
 
 protocol NetworkClientProtocol {
-    func request<T: Decodable>(_ endpoint: Endpoint) async -> Result<T, NetworkError>
+    func request<T: Decodable>(_ endpoint: Endpoint) async throws -> T
 }
 
 struct NetworkClient: NetworkClientProtocol {
@@ -35,23 +35,23 @@ struct NetworkClient: NetworkClientProtocol {
         self.defaultHeaders = defaultHeaders
     }
 
-    func request<T: Decodable>(_ endpoint: Endpoint) async -> Result<T, NetworkError> {
+    func request<T: Decodable>(_ endpoint: Endpoint) async throws -> T {
         guard let urlRequest = endpoint.makeRequest(baseURL: baseURL, defaultHeaders: defaultHeaders) else {
-            return .failure(.invalidRequest)
+            throw NetworkError.invalidRequest
         }
         do {
             let (data, response) = try await urlSession.data(for: urlRequest)
             if let http = response as? HTTPURLResponse, !(200...299).contains(http.statusCode) {
-                return .failure(.serverStatus(http.statusCode))
+                throw NetworkError.serverStatus(http.statusCode)
             }
             do {
                 let decoded = try JSONDecoder().decode(T.self, from: data)
-                return .success(decoded)
+                return decoded
             } catch {
-                return .failure(.decoding(error))
+                throw NetworkError.decoding(error)
             }
         } catch {
-            return .failure(.transport(error))
+            throw NetworkError.transport(error)
         }
     }
 }

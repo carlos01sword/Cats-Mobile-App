@@ -18,14 +18,13 @@ extension BreedsViewModel {
 
     func loadMore(context: ModelContext) async {
         guard !isLoading, canLoadMore else { return }
-        if phase != .initialLoading { transition(to: .pageLoading) }
+        if state != .initialLoading { transition(to: .pageLoading) }
         await loadPage(context: context, isInitial: false)
     }
 
     private func loadPage(context: ModelContext, isInitial: Bool) async {
-        let result = await repository.fetchPage(page: currentPage, limit: pageSize, context: context)
-        switch result {
-        case .success(let pageResult):
+        do {
+            let pageResult = try await repository.fetchPage(page: currentPage, limit: pageSize, context: context)
             let fetchedCount = pageResult.fetchedCount
             catBreeds = pageResult.breeds
             guard fetchedCount > 0 else {
@@ -35,9 +34,12 @@ extension BreedsViewModel {
             advancePage()
             let reachedEnd = fetchedCount < pageSize
             transition(to: reachedEnd ? .endReached : .idle)
-        case .failure(let domainError):
+        } catch let domainError as DomainError {
             transition(to: .error(domainError))
             await handleFetchFailure(domainError, context: context)
+        } catch {
+            transition(to: .error(.networkError))
+            await handleFetchFailure(.networkError, context: context)
         }
     }
 }

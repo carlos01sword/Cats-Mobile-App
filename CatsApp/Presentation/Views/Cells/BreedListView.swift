@@ -9,32 +9,54 @@ import SwiftUI
 
 struct BreedListView<Header: View>: View {
     let breeds: [CatBreed]
-    let header: Header?
-    let rowContent: (CatBreed) -> AnyView
+    private let header: Header?
+    private let onSelect: (CatBreed) -> Void
+    private let onFavorite: (CatBreed) -> Void
+    private let onRowAppear: (CatBreed) -> Void
 
     init(
         breeds: [CatBreed],
         header: Header? = nil,
-        rowContent: @escaping (CatBreed) -> AnyView
+        onSelect: @escaping (CatBreed) -> Void = { _ in },
+        onFavorite: @escaping (CatBreed) -> Void = { _ in },
+        onRowAppear: @escaping (CatBreed) -> Void = { _ in }
     ) {
         self.breeds = breeds
         self.header = header
-        self.rowContent = rowContent
+        self.onSelect = onSelect
+        self.onFavorite = onFavorite
+        self.onRowAppear = onRowAppear
+    }
+
+    // Initializer for when there is no header just for convenience
+    init(
+        breeds: [CatBreed],
+        onSelect: @escaping (CatBreed) -> Void = { _ in },
+        onFavorite: @escaping (CatBreed) -> Void = { _ in },
+        onRowAppear: @escaping (CatBreed) -> Void = { _ in }
+    ) where Header == EmptyView {
+        self.breeds = breeds
+        self.header = nil
+        self.onSelect = onSelect
+        self.onFavorite = onFavorite
+        self.onRowAppear = onRowAppear
     }
 
     var body: some View {
         List {
             if let header = header {
-                Section {
-                    header
-                }
-                .listRowSeparator(.hidden)
-            }
-
-            ForEach(breeds) { breed in
-                rowContent(breed)
+                Section { header }
                     .listRowSeparator(.hidden)
-                    
+            }
+            ForEach(breeds) { breed in
+                BreedRowView(
+                    breed: breed,
+                    onFavoriteTapped: { onFavorite(breed) }
+                )
+                .contentShape(Rectangle())
+                .onTapGesture { onSelect(breed) }
+                .onAppear { onRowAppear(breed) }
+                .listRowSeparator(.hidden)
             }
         }
         .listStyle(.plain)
@@ -42,9 +64,5 @@ struct BreedListView<Header: View>: View {
 }
 
 #Preview {
-    BreedListView(breeds: MockData.breeds, header: EmptyView()) { breed in
-        AnyView(
-            BreedRowView(breed: breed) {}
-        )
-    }
+    BreedListView(breeds: MockData.breeds)
 }

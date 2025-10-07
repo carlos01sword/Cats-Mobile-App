@@ -15,7 +15,7 @@ extension BreedsViewModel {
             transition(to: .endReached)
         } else if !hadDataBefore {
             transition(to: .error(error))
-        } else if phase == .pageLoading {
+        } else if state == .pageLoading {
             transition(to: .idle)
         }
     }
@@ -26,6 +26,7 @@ extension BreedsViewModel {
             let saved = try repository.fetchAll(context: context)
             guard !saved.isEmpty else { return false }
             catBreeds = saved
+            currentPage = catBreeds.count / pageSize
             return true
         } catch let domainError as DomainError {
             print("Cache fetch error: \(domainError)")
@@ -40,7 +41,8 @@ extension BreedsViewModel {
         guard catBreeds.isEmpty else { return }
         if let saved = try? repository.fetchAll(context: context), !saved.isEmpty {
             catBreeds = saved
-            if phase == .idle { } else { transition(to: .idle) }
+            currentPage = catBreeds.count / pageSize
+            if state == .idle { } else { transition(to: .idle) }
         }
     }
 }

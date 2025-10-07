@@ -9,34 +9,36 @@ import SwiftUI
 import SwiftData
 
 struct DetailsView: View {
-    
     @Environment(\.modelContext) private var context
-    @Bindable var breed: CatBreed
+    @EnvironmentObject private var favoritesViewModel: FavoritesViewModel
+    @StateObject private var viewModel: DetailsViewModel
     
+    init(breed: CatBreed, favoritesViewModel: FavoritesViewModel) {
+        _viewModel = StateObject(wrappedValue: DetailsViewModel(breed: breed, favoritesViewModel: favoritesViewModel))
+    }
+
     var body: some View {
         VStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
                     Spacer(minLength: 32)
-                    
-                    Text(breed.name)
+                    Text(viewModel.name)
                         .font(.title)
                         .bold()
                         .multilineTextAlignment(.center)
                         .frame(maxWidth: .infinity, alignment: .center)
-
                     VStack(alignment: .leading, spacing: 24) {
                         Text("Origin:")
                             .font(.headline)
-                        Text(breed.origin)
+                        Text(viewModel.origin)
                             .font(.body)
                         Text("Temperament:")
                             .font(.headline)
-                        Text(breed.temperament)
+                        Text(viewModel.temperament)
                             .font(.body)
                         Text("Description:")
                             .font(.headline)
-                        Text(breed.breedDescription)
+                        Text(viewModel.breedDescription)
                             .font(.body)
                     }
                     .padding()
@@ -46,17 +48,14 @@ struct DetailsView: View {
                             .shadow(color: Color.black.opacity(0.1), radius: 8, x: 0, y: 4)
                     )
                     .padding(.horizontal)
-
                     Spacer(minLength: 32)
                 }
                 .padding()
             }
-
             Button {
-                breed.isFavorite.toggle()
-                try? context.save()
+                viewModel.toggleFavorite(context: context)
             } label: {
-                Text(breed.isFavorite ? "Remove from Favorites" : "Add to Favorites")
+                Text(viewModel.favoriteButtonLabel)
                     .font(.headline)
                     .foregroundColor(.white)
                     .multilineTextAlignment(.center)
@@ -64,7 +63,7 @@ struct DetailsView: View {
                     .frame(minWidth: 220)
                     .background(
                         RoundedRectangle(cornerRadius: 12)
-                            .fill(breed.isFavorite ? Color.red : Color.blue)
+                            .fill(viewModel.favoriteButtonColor)
                             .shadow(color: Color(.systemGray3), radius: 2, x: 0, y: 2)
                     )
             }
@@ -76,5 +75,8 @@ struct DetailsView: View {
 }
 
 #Preview {
-    DetailsView(breed: MockData.sampleBreed)
+    let favoritesViewModel = FavoritesViewModel()
+    DetailsView(breed: MockData.sampleBreed, favoritesViewModel: FavoritesViewModel())
+        .modelContainer(for: CatBreed.self, inMemory: true)
+        .environmentObject(favoritesViewModel)
 }

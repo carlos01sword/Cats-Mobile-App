@@ -10,47 +10,32 @@ import SwiftData
 
 struct FavoritesView: View {
     @Environment(\.modelContext) private var context
-    @EnvironmentObject private var viewModel: BreedsViewModel
+    @EnvironmentObject private var viewModel: FavoritesViewModel
     @State private var selectedBreed: CatBreed?
-    
+
     var body: some View {
         NavigationStack {
             if viewModel.favoriteBreeds.isEmpty {
                 FavoritesEmptyStateView()
             } else {
-            BreedListView(
-                breeds: viewModel.favoriteBreeds,
-                header: AverageTabView(breeds: viewModel.favoriteBreeds)
-            ) { breed in
-                AnyView(
-                    BreedRowView(breed: breed, onFavoriteTapped: {
-                            viewModel.toggleFavorite(for: breed, context: context)
-                        })
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        selectedBreed = breed
-                    }
-                    .buttonStyle(PlainButtonStyle())
+                BreedListView(
+                    breeds: viewModel.favoriteBreeds,
+                    header: AverageTabView(breeds: viewModel.favoriteBreeds),
+                    onSelect: { selectedBreed = $0 },
+                    onFavorite: { viewModel.toggleFavorite(for: $0, context: context) }
                 )
-            }
-            .navigationTitle("Favorites")
+                .navigationTitle("Favorites")
             }
         }
         .sheet(item: $selectedBreed) { breed in
-            DetailsView(breed: breed)
+            DetailsView(breed: breed, favoritesViewModel: viewModel)
         }
+        .onAppear { viewModel.loadFavorites(context: context) }
     }
 }
 
 #Preview {
-    let config = ModelConfiguration(isStoredInMemoryOnly: true)
-    let container = try! ModelContainer(for: CatBreed.self, configurations: config)
-    let vm = BreedsViewModel()
-    if let sample = MockData.sampleBreed as CatBreed? { 
-        sample.isFavorite = true
-        vm.catBreeds = [sample]
-    }
-    return FavoritesView()
-        .modelContainer(container)
-        .environmentObject(vm)
+    FavoritesView()
+        .modelContainer(for: CatBreed.self, inMemory: true)
+        .environmentObject(FavoritesViewModel())
 }
