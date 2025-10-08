@@ -65,6 +65,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				CatsAppTests.swift,
+				NetworkRequests.swift,
 			);
 			target = 873C03602E3D7AB7001527C1 /* CatsApp */;
 		};
@@ -72,6 +73,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				CatsAppTests.swift,
+				NetworkRequests.swift,
 			);
 			target = 873C03702E3D7AB8001527C1 /* CatsAppTests */;
 		};
@@ -666,7 +668,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = metatracker.CatsAppTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CatsApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CatsApp";
 			};
@@ -684,7 +686,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = metatracker.CatsAppTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CatsApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CatsApp";
 			};

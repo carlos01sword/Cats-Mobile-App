@@ -46,8 +46,17 @@ struct BreedsDataService: BreedsFetching {
         do {
             let breeds: [CatBreed] = try await client.request(endpoint)
             return breeds
+        } catch let networkError as NetworkError {
+            switch networkError {
+            case .invalidRequest, .serverStatus, .transport:
+                throw DomainError.networkError
+            case .decoding:
+                throw DomainError.decodingError
+            case .unknown:
+                throw DomainError.unknownError
+            }
         } catch {
-            throw error
+            throw DomainError.unknownError
         }
     }
 }
