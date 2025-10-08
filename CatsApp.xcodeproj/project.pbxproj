@@ -64,16 +64,16 @@
 		0AF5BA0A2E8F3E660018B70C /* Exceptions for "CatsAppTests" folder in "CatsApp" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				BreedsDataServiceTests.swift,
 				CatsAppTests.swift,
-				NetworkRequests.swift,
 			);
 			target = 873C03602E3D7AB7001527C1 /* CatsApp */;
 		};
 		0AF5BA0B2E8F3E660018B70C /* Exceptions for "CatsAppTests" folder in "CatsAppTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				BreedsDataServiceTests.swift,
 				CatsAppTests.swift,
-				NetworkRequests.swift,
 			);
 			target = 873C03702E3D7AB8001527C1 /* CatsAppTests */;
 		};
