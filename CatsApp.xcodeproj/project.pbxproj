@@ -66,6 +66,7 @@
 			membershipExceptions = (
 				BreedsDataServiceTests.swift,
 				CatsAppTests.swift,
+				NetworkClientTests.swift,
 			);
 			target = 873C03602E3D7AB7001527C1 /* CatsApp */;
 		};
@@ -74,6 +75,7 @@
 			membershipExceptions = (
 				BreedsDataServiceTests.swift,
 				CatsAppTests.swift,
+				NetworkClientTests.swift,
 			);
 			target = 873C03702E3D7AB8001527C1 /* CatsAppTests */;
 		};

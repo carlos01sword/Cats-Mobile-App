@@ -19,7 +19,7 @@ struct BreedsDataService: BreedsFetching {
         self.client = client
     }
     
-    struct CatBreed: Decodable {
+    struct CatBreed: Codable {
         let id: String
         let name: String
         let origin: String
