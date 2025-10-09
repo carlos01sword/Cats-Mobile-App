@@ -19,7 +19,7 @@ struct BreedsDataService: BreedsFetching {
         self.client = client
     }
     
-    struct CatBreed: Decodable {
+    struct CatBreed: Codable {
         let id: String
         let name: String
         let origin: String
@@ -46,8 +46,17 @@ struct BreedsDataService: BreedsFetching {
         do {
             let breeds: [CatBreed] = try await client.request(endpoint)
             return breeds
+        } catch let networkError as NetworkError {
+            switch networkError {
+            case .invalidRequest, .serverStatus, .transport:
+                throw DomainError.networkError
+            case .decoding:
+                throw DomainError.decodingError
+            case .unknown:
+                throw DomainError.unknownError
+            }
         } catch {
-            throw error
+            throw DomainError.unknownError
         }
     }
 }
