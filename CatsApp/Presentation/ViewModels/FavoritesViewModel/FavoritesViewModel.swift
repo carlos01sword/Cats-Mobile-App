@@ -4,10 +4,10 @@ import SwiftData
 @MainActor
 final class FavoritesViewModel: ObservableObject {
     @Published private(set) var favorites: [CatBreed] = []
-    private let repository: BreedsRepositoryProtocol
+    private let service: FavoritesServiceProtocol
     
-    init(repository: BreedsRepositoryProtocol = BreedsRepository()) {
-        self.repository = repository
+    init(service: FavoritesServiceProtocol = FavoritesService()) {
+        self.service = service
     }
     
     var favoriteBreeds: [CatBreed] {
@@ -16,20 +16,24 @@ final class FavoritesViewModel: ObservableObject {
     
     func toggleFavorite(for breed: CatBreed, context: ModelContext) {
         do {
-            try repository.toggleFavorite(breed, context: context)
+            try service.toggleFavorite(breed, context: context)
             loadFavorites(context: context)
         } catch {
             print("Failed to toggle favorite: \(error)")
         }
     }
     
-    func isFavorite(_ breed: CatBreed) -> Bool {
-        favorites.contains(where: { $0.id == breed.id })
+    func isFavorite(_ breed: CatBreed, context: ModelContext) -> Bool {
+        do {
+            return try service.isFavorite(breed, context: context)
+        } catch {
+            return false
+        }
     }
     
     func loadFavorites(context: ModelContext) {
         do {
-            favorites = try repository.fetchFavorites(context: context)
+            favorites = try service.fetchFavorites(context: context)
         } catch {
             favorites = []
         }

@@ -47,7 +47,6 @@ final class BreedsViewModel: ObservableObject {
         searchService.searchBreeds(query: searchText, in: catBreeds)
     }
 
-    //FavoritesState for favorite breeds
     var favoriteBreeds: [CatBreed] { favoritesViewModel.favorites }
     
     func transition(to newPhase: ViewState) { state = newPhase }

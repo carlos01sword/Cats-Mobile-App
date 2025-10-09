@@ -15,7 +15,7 @@ struct FavoritesButton : View{
         Button {
             viewModel.toggleFavorite(context: context)
         } label: {
-            Text(viewModel.favoriteButtonLabel)
+            Text(viewModel.favoriteButtonLabel(context: context))
                 .font(.headline)
                 .foregroundColor(.white)
                 .multilineTextAlignment(.center)
@@ -23,7 +23,7 @@ struct FavoritesButton : View{
                 .frame(minWidth: 220)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(viewModel.favoriteButtonColor)
+                        .fill(viewModel.favoriteButtonColor(context: context))
                         .shadow(color: Color(.systemGray3), radius: 2, x: 0, y: 2)
                 )
         }
