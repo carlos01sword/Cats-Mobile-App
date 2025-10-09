@@ -53,25 +53,18 @@ struct NetworkClientTests {
 struct NetworkClientErrorTests {
     
     @Test("Throws decoding error for empty data")
-    func testEmptyDataDecodingError() async {
-        let client = MockClient()
-        client.resultData = Data()
-        let endpoint = Endpoint(path: "breeds")
-        do {
-            _ = try await client.request(endpoint) as [BreedsDataService.CatBreed]
-            #expect(Bool(false), "Expected decoding error for empty data, but got success")
-        } catch {
-            if let netErr = error as? NetworkError {
-                if case .decoding = netErr {
-                    #expect(true)
-                } else {
-                    #expect(Bool(false), "Expected decoding error, got \(netErr)")
-                }
-            } else {
-                #expect(Bool(false), "Expected NetworkError but got \(type(of: error))")
-            }
-        }
+func testEmptyDataDecodingError() async throws { // Add a 'throws' here
+    let client = MockClient()
+    client.resultData = Data()
+    let endpoint = Endpoint(path: "breeds")
+
+    let thrownError = try await #expect(throws: client.request(endpoint) as [BreedsDataService.CatBreed])
+
+    guard case .decoding = thrownError as? NetworkError else {
+        #expect(false, "Expected NetworkError.decoding, but got \(thrownError)")
+        return
     }
+}
     @Test("Throws decoding error for malformed data")
     func testMalformedDataDecodingError() async {
         let client = MockClient()
