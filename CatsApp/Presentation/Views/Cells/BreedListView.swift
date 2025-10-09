@@ -13,19 +13,25 @@ struct BreedListView<Header: View>: View {
     private let onSelect: (CatBreed) -> Void
     private let onFavorite: (CatBreed) -> Void
     private let onRowAppear: (CatBreed) -> Void
+    var isLoading: Bool
+    let isEndReached: Bool
 
     init(
         breeds: [CatBreed],
         header: Header? = nil,
         onSelect: @escaping (CatBreed) -> Void = { _ in },
         onFavorite: @escaping (CatBreed) -> Void = { _ in },
-        onRowAppear: @escaping (CatBreed) -> Void = { _ in }
+        onRowAppear: @escaping (CatBreed) -> Void = { _ in },
+        isLoading: Bool = false,
+        isEndReached: Bool = false
     ) {
         self.breeds = breeds
         self.header = header
         self.onSelect = onSelect
         self.onFavorite = onFavorite
         self.onRowAppear = onRowAppear
+        self.isLoading = isLoading
+        self.isEndReached = isEndReached
     }
 
     // Initializer for when there is no header just for convenience
@@ -33,34 +39,73 @@ struct BreedListView<Header: View>: View {
         breeds: [CatBreed],
         onSelect: @escaping (CatBreed) -> Void = { _ in },
         onFavorite: @escaping (CatBreed) -> Void = { _ in },
-        onRowAppear: @escaping (CatBreed) -> Void = { _ in }
+        onRowAppear: @escaping (CatBreed) -> Void = { _ in },
+        isLoading: Bool = false,
+        isEndReached: Bool = false
     ) where Header == EmptyView {
         self.breeds = breeds
         self.header = nil
         self.onSelect = onSelect
         self.onFavorite = onFavorite
         self.onRowAppear = onRowAppear
+        self.isLoading = isLoading
+        self.isEndReached = isEndReached
     }
 
     var body: some View {
-        List {
-            if let header = header {
-                Section { header }
-                    .listRowSeparator(.hidden)
-            }
-            ForEach(breeds) { breed in
-                BreedRowView(
-                    breed: breed,
-                    onFavoriteTapped: { onFavorite(breed) }
-                )
-                .contentShape(Rectangle())
-                .onTapGesture { onSelect(breed) }
-                .onAppear { onRowAppear(breed) }
-                .listRowSeparator(.hidden)
+        ZStack {
+            VStack(spacing: 0) {
+                List {
+                    if let header = header {
+                        Section { header }
+                            .listRowSeparator(.hidden)
+                    }
+                    ForEach(breeds) { breed in
+                        BreedRowView(
+                            breed: breed,
+                            onFavoriteTapped: { onFavorite(breed) }
+                        )
+                        .contentShape(Rectangle())
+                        .onTapGesture { onSelect(breed) }
+                        .onAppear { onRowAppear(breed) }
+                        .listRowSeparator(.hidden)
+                    }
+                    if isEndReached {
+                        endReachedView
+                    }
+                }
+                .listStyle(.plain)
+                Spacer(minLength: 0)
+                if isLoading {
+                    loadingView
+                }
             }
         }
-        .listStyle(.plain)
     }
+    
+    private var loadingView: some View {
+        HStack {
+            Spacer()
+            ProgressView()
+                .progressViewStyle(CircularProgressViewStyle())
+                .scaleEffect(1.2)
+                .padding(12)
+            Spacer()
+        }
+    }
+    
+    private var endReachedView: some View {
+        HStack {
+            Spacer()
+            Text("No more breeds to load")
+                .font(.footnote)
+                .foregroundColor(.secondary)
+                .padding()
+            Spacer()
+        }
+        .listRowSeparator(.hidden)
+    }
+        
 }
 
 #Preview {
