@@ -53,18 +53,26 @@ struct NetworkClientTests {
 struct NetworkClientErrorTests {
     
     @Test("Throws decoding error for empty data")
-func testEmptyDataDecodingError() async throws { // Add a 'throws' here
-    let client = MockClient()
-    client.resultData = Data()
-    let endpoint = Endpoint(path: "breeds")
-
-    let thrownError = try await #expect(throws: client.request(endpoint) as [BreedsDataService.CatBreed])
-
-    guard case .decoding = thrownError as? NetworkError else {
-        #expect(false, "Expected NetworkError.decoding, but got \(thrownError)")
-        return
-    }
-}
+    func testEmptyDataDecodingError() async {
+            let client = MockClient()
+            client.resultData = Data()
+            let endpoint = Endpoint(path: "breeds")
+            do {
+                _ = try await client.request(endpoint) as [BreedsDataService.CatBreed]
+                #expect(Bool(false), "Expected decoding error for empty data, but got success")
+            } catch {
+                if let netErr = error as? NetworkError {
+                    if case .decoding = netErr {
+                        #expect(true)
+                    } else {
+                        #expect(Bool(false), "Expected decoding error, got \(netErr)")
+                    }
+                } else {
+                    #expect(Bool(false), "Expected NetworkError but got \(type(of: error))")
+                }
+            }
+        }
+    
     @Test("Throws decoding error for malformed data")
     func testMalformedDataDecodingError() async {
         let client = MockClient()
@@ -73,62 +81,45 @@ func testEmptyDataDecodingError() async throws { // Add a 'throws' here
         do {
             _ = try await client.request(endpoint) as [BreedsDataService.CatBreed]
             #expect(Bool(false), "Expected decoding error for malformed data, but got success")
+        } catch let error as NetworkError {
+            if case .decoding = error {}
+            else { #expect(Bool(false), "Expected NetworkError.decoding, got \(error)") }
         } catch {
-            if let netErr = error as? NetworkError {
-                if case .decoding = netErr {
-                    #expect(true)
-                } else {
-                    #expect(Bool(false), "Expected decoding error, got \(netErr)")
-                }
-            } else {
-                #expect(Bool(false), "Expected NetworkError but got \(type(of: error))")
-            }
+            #expect(Bool(false), "Expected NetworkError but got \(type(of: error))")
         }
     }
 }
 
-@Suite("NetworkClient HTTP Status Test")
+@Suite("NetworkClient HTTP Status Tests")
 struct NetworkClientStatusCodeTests {
-    @Test("Throws serverStatus error for 404 response")
-    func test404StatusCode() async {
+
+    func runStatusCodeTest(_ code: Int) async {
         let client = MockClient()
-        client.statusCode = 404
+        client.statusCode = code
         client.resultData = Data("[]".utf8)
         let endpoint = Endpoint(path: "breeds")
+
         do {
             _ = try await client.request(endpoint) as [BreedsDataService.CatBreed]
-            #expect(Bool(false), "Expected serverStatus error for 404, but got success")
-        } catch {
-            if let netErr = error as? NetworkError {
-                if case .serverStatus(let code) = netErr {
-                    #expect(code == 404, "Expected 404 status code, got \(code)")
-                } else {
-                    #expect(Bool(false), "Expected serverStatus error, got \(netErr)")
-                }
+            #expect(Bool(false), "Expected serverStatus error for \(code), but got success")
+        } catch let error as NetworkError {
+            if case .serverStatus(let receivedCode) = error {
+                #expect(receivedCode == code, "Expected \(code) status code, got \(receivedCode)")
             } else {
-                #expect(Bool(false), "Expected NetworkError but got \(type(of: error))")
+                #expect(Bool(false), "Expected NetworkError.serverStatus, got \(error)")
             }
+        } catch {
+            #expect(Bool(false), "Expected NetworkError but got \(type(of: error))")
         }
     }
+
+    @Test("Throws serverStatus error for 404 response")
+    func test404StatusCode() async {
+        await runStatusCodeTest(404)
+    }
+
     @Test("Throws serverStatus error for 500 response")
     func test500StatusCode() async {
-        let client = MockClient()
-        client.statusCode = 500
-        client.resultData = Data("[]".utf8)
-        let endpoint = Endpoint(path: "breeds")
-        do {
-            _ = try await client.request(endpoint) as [BreedsDataService.CatBreed]
-            #expect(Bool(false), "Expected serverStatus error for 500, but got success")
-        } catch {
-            if let netErr = error as? NetworkError {
-                if case .serverStatus(let code) = netErr {
-                    #expect(code == 500, "Expected 500 status code, got \(code)")
-                } else {
-                    #expect(Bool(false), "Expected serverStatus error, got \(netErr)")
-                }
-            } else {
-                #expect(Bool(false), "Expected NetworkError but got \(type(of: error))")
-            }
-        }
+        await runStatusCodeTest(500)
     }
 }
