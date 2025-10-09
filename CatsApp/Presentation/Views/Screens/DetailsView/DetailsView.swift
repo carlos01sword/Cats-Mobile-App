@@ -22,55 +22,28 @@ struct DetailsView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
                     Spacer(minLength: 32)
-                    Text(viewModel.name)
-                        .font(.title)
-                        .bold()
-                        .multilineTextAlignment(.center)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                    VStack(alignment: .leading, spacing: 24) {
-                        Text("Origin:")
-                            .font(.headline)
-                        Text(viewModel.origin)
-                            .font(.body)
-                        Text("Temperament:")
-                            .font(.headline)
-                        Text(viewModel.temperament)
-                            .font(.body)
-                        Text("Description:")
-                            .font(.headline)
-                        Text(viewModel.breedDescription)
-                            .font(.body)
-                    }
-                    .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 24, style: .continuous)
-                            .fill(Color(.secondarySystemBackground))
-                            .shadow(color: Color.black.opacity(0.1), radius: 8, x: 0, y: 4)
+                    cardTitle
+                    
+                    DetailsCardView(
+                        origin: viewModel.origin,
+                        temperament: viewModel.temperament,
+                        breedDescription: viewModel.breedDescription
                     )
-                    .padding(.horizontal)
+                    
                     Spacer(minLength: 32)
                 }
                 .padding()
             }
-            Button {
-                viewModel.toggleFavorite(context: context)
-            } label: {
-                Text(viewModel.favoriteButtonLabel)
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .multilineTextAlignment(.center)
-                    .padding()
-                    .frame(minWidth: 220)
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(viewModel.favoriteButtonColor)
-                            .shadow(color: Color(.systemGray3), radius: 2, x: 0, y: 2)
-                    )
-            }
-            .padding(.vertical, 12)
-            .frame(maxWidth: .infinity)
-            .background(Color(.systemBackground))
+            FavoritesButton(viewModel: viewModel)
         }
+    }
+    
+    private var cardTitle: some View {
+        Text(viewModel.name)
+            .font(.title)
+            .bold()
+            .multilineTextAlignment(.center)
+            .frame(maxWidth: .infinity, alignment: .center)
     }
 }
 
