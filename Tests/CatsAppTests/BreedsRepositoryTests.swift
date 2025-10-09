@@ -11,6 +11,7 @@ import Testing
 
 @testable import CatsApp
 
+@MainActor
 @Suite("BreedsRepositoryTests")
 struct BreedsRepositoryTests {
     @MainActor
