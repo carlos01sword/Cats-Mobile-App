@@ -18,6 +18,8 @@ protocol DatabaseServiceProtocol {
     func fetchFavoriteBreeds(context: ModelContext) throws -> [CatBreed]
     @MainActor
     func toggleFavorite(_ breed: CatBreed, context: ModelContext) throws
+    @MainActor
+    func cacheImage(forBreedId breedId: String, withUrl urlString: String, context: ModelContext) async throws
 }
 
 struct DatabaseService: DatabaseServiceProtocol {
@@ -99,6 +101,19 @@ struct DatabaseService: DatabaseServiceProtocol {
             try context.save()
         } catch {
             throw DomainError.persistenceError
+        }
+    }
+    @MainActor
+    func cacheImage(forBreedId breedId: String, withUrl urlString: String, context: ModelContext) async throws {
+        guard let url = URL(string: urlString) else { return }
+        let descriptor = FetchDescriptor<CatBreed>(predicate: #Predicate { $0.id == breedId })
+        guard let breed = try? context.fetch(descriptor).first else { return }
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            breed.imageData = data
+            try context.save()
+        } catch {
+            throw DomainError.decodingError
         }
     }
 }

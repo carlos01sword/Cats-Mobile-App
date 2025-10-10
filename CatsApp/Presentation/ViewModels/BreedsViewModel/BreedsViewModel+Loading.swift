@@ -27,6 +27,11 @@ extension BreedsViewModel {
             let pageResult = try await repository.fetchPage(page: currentPage, limit: pageSize, context: context)
             let fetchedCount = pageResult.fetchedCount
             catBreeds = pageResult.breeds
+            for breed in catBreeds {
+                if breed.imageData == nil, let url = breed.referenceImageUrl {
+                    try? await repository.cacheImage(forBreedId: breed.id, withUrl: url, context: context)
+                }
+            }
             guard fetchedCount > 0 else {
                 transition(to: .endReached)
                 return

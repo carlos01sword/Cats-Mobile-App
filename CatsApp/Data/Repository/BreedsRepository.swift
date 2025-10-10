@@ -13,6 +13,8 @@ protocol BreedsRepositoryProtocol {
     func fetchFavorites(context: ModelContext) throws -> [CatBreed]
     @MainActor
     func fetchAll(context: ModelContext) throws -> [CatBreed]
+    @MainActor
+    func cacheImage(forBreedId breedId: String, withUrl urlString: String, context: ModelContext) async throws
 }
 
 struct PageResult {
@@ -68,5 +70,13 @@ struct BreedsRepository: BreedsRepositoryProtocol {
     @MainActor
     func fetchAll(context: ModelContext) throws -> [CatBreed] {
         try database.fetchAllBreeds(context: context)
+    }
+    @MainActor
+    func cacheImage(forBreedId breedId: String, withUrl urlString: String, context: ModelContext) async throws {
+        do {
+            try await database.cacheImage(forBreedId: breedId, withUrl: urlString, context: context)
+        } catch {
+            throw DomainError.customError("Failed to cache image: \(error.localizedDescription)")
+        }
     }
 }

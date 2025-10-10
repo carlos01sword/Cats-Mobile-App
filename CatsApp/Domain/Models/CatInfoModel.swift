@@ -18,6 +18,7 @@ class CatBreed: Identifiable {
     var lifeSpan: String
     var referenceImageId: String?
     var isFavorite: Bool
+    var imageData: Data?
 
     init(
         id: String,
@@ -27,7 +28,8 @@ class CatBreed: Identifiable {
         breedDescription: String,
         lifeSpan: String,
         referenceImageId: String? = nil,
-        isFavorite: Bool = false
+        isFavorite: Bool = false,
+        imageData: Data? = nil
     ) {
         self.id = id
         self.name = name
@@ -37,6 +39,7 @@ class CatBreed: Identifiable {
         self.lifeSpan = lifeSpan
         self.referenceImageId = referenceImageId
         self.isFavorite = isFavorite
+        self.imageData = imageData
     }
 
     var referenceImageUrl: String? {
