@@ -53,36 +53,35 @@ struct BreedListView<Header: View>: View {
     }
 
     var body: some View {
-        ZStack {
-            VStack(spacing: 0) {
-                List {
-                    if let header = header {
-                        Section { header }
-                            .listRowSeparator(.hidden)
-                    }
-                    ForEach(breeds) { breed in
-                        BreedRowView(
-                            breed: breed,
-                            onFavoriteTapped: { onFavorite(breed) }
-                        )
-                        .contentShape(Rectangle())
-                        .onTapGesture { onSelect(breed) }
-                        .onAppear { onRowAppear(breed) }
-                        .listRowSeparator(.hidden)
-                    }
-                    if isEndReached {
-                        endReachedView
-                    }
+        ScrollView {
+            LazyVStack(spacing: 0) {
+                if let header = header {
+                    Section { header }
                 }
-                .listStyle(.plain)
-                Spacer(minLength: 0)
+
+                ForEach(breeds) { breed in
+                    BreedRowView(
+                        breed: breed,
+                        onFavoriteTapped: { onFavorite(breed) }
+                    )
+                    .contentShape(Rectangle())
+                    .onTapGesture { onSelect(breed) }
+                    .onAppear { onRowAppear(breed) }
+                    .padding(.horizontal)
+                    .padding(.vertical, 10)
+                }
+
+                if isEndReached {
+                    endReachedView
+                }
+
                 if isLoading {
                     loadingView
                 }
             }
         }
     }
-    
+
     private var loadingView: some View {
         HStack {
             Spacer()
@@ -93,7 +92,7 @@ struct BreedListView<Header: View>: View {
             Spacer()
         }
     }
-    
+
     private var endReachedView: some View {
         HStack {
             Spacer()
@@ -105,7 +104,7 @@ struct BreedListView<Header: View>: View {
         }
         .listRowSeparator(.hidden)
     }
-        
+
 }
 
 #Preview {
