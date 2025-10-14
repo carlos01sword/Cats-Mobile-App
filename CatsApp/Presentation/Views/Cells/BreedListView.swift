@@ -54,7 +54,7 @@ struct BreedListView<Header: View>: View {
 
     var body: some View {
         ScrollView {
-            LazyVStack(spacing: 0) {
+            LazyVStack(spacing: .zero) {
                 if let header = header {
                     Section { header }
                 }
