@@ -17,7 +17,6 @@ protocol FavoritesServiceProtocol {
     func isFavorite(_ breed: CatBreed, context: ModelContext) throws -> Bool
 }
 
-
 struct FavoritesService: FavoritesServiceProtocol {
     private let repository: BreedsRepositoryProtocol
     
