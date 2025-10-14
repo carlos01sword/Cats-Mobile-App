@@ -7,12 +7,17 @@ import SwiftUI
 
 struct BreedThumbnailView: View {
     let urlString: String?
+    let imageData: Data?
     var size: CGFloat = 60
     var cornerRadius: CGFloat = 8
 
     var body: some View {
         Group {
-            if let urlString, let url = URL(string: urlString) {
+            if let imageData, let uiImage = UIImage(data: imageData) {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .scaledToFill()
+            } else if let urlString, let url = URL(string: urlString) {
                 AsyncImage(url: url) { phase in
                     switch phase {
                     case .empty:
@@ -43,9 +48,9 @@ struct BreedThumbnailView: View {
 
 #Preview {
     HStack(spacing: 20) {
-        BreedThumbnailView(urlString: "https://cdn2.thecatapi.com/images/abc.jpg")
-        BreedThumbnailView(urlString: nil)
-        BreedThumbnailView(urlString: "invalid-url")
+        BreedThumbnailView(urlString: "https://cdn2.thecatapi.com/images/abc.jpg", imageData: nil)
+        BreedThumbnailView(urlString: nil, imageData: nil)
+        BreedThumbnailView(urlString: "invalid-url", imageData: nil)
     }
     .padding()
 }

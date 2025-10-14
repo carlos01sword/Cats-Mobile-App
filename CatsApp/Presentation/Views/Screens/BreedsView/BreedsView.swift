@@ -19,23 +19,32 @@ struct BreedsView: View {
     }
 
     var body: some View {
-        NavigationStack {
-            content
-                .breedSearchable($viewModel.searchText)
-                .navigationTitle("Cats App")
-                .alert(
-                    "Failed to Load Data",
-                    isPresented: .constant(viewModel.fetchErrorMessage != nil)
-                ) {
-                    Button("OK", role: .cancel) {}
-                } message: {
-                    Text(viewModel.fetchErrorMessage ?? "")
+        ZStack{
+            if viewModel.catBreeds.isEmpty && viewModel.isLoading {
+                VStack{
+                    ProgressView("Loading Breeds")
                 }
-                .task { initialLoadIfNeeded() }
+            } else {
+                NavigationStack {
+                    content
+                        .breedSearchable($viewModel.searchText)
+                        .navigationTitle("Cats App")
+                        .alert(
+                            "Failed to Load Data",
+                            isPresented: .constant(viewModel.fetchErrorMessage != nil)
+                        ) {
+                            Button("OK", role: .cancel) {}
+                        } message: {
+                            Text(viewModel.fetchErrorMessage ?? "")
+                        }
+                        .task { initialLoadIfNeeded() }
+                }
+                .sheet(item: $selectedBreed) { breed in
+                    DetailsView(breed: breed, favoritesViewModel: favoritesViewModel)
+                }
+            }
         }
-        .sheet(item: $selectedBreed) { breed in
-            DetailsView(breed: breed, favoritesViewModel: favoritesViewModel)
-        }
+        
     }
 }
 
@@ -49,7 +58,9 @@ private extension BreedsView {
                     breeds: viewModel.filteredBreeds,
                     onSelect: { selectedBreed = $0 },
                     onFavorite: { favoritesViewModel.toggleFavorite(for: $0, context: context) },
-                    onRowAppear: handleRowAppear
+                    onRowAppear: handleRowAppear,
+                    isLoading: viewModel.isLoading,
+                    isEndReached: !viewModel.canLoadMore
                 )
             }
         }

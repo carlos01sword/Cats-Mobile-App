@@ -13,7 +13,7 @@ struct BreedRowView: View {
 
     var body: some View {
         HStack(spacing: 16) {
-            BreedThumbnailView(urlString: breed.referenceImageUrl)
+            BreedThumbnailView(urlString: breed.referenceImageUrl, imageData: breed.imageData)
 
             Text(breed.name)
                 .font(.headline)

@@ -16,20 +16,18 @@ final class DetailsViewModel: ObservableObject {
         favoritesViewModel.toggleFavorite(for: breed, context: context)
     }
     
-    var isFavorite: Bool {
-        favoritesViewModel.isFavorite(breed)
+    func isFavorite(context: ModelContext) -> Bool {
+        favoritesViewModel.isFavorite(breed, context: context)
     }
     
     var name: String { breed.name }
     var origin: String { breed.origin }
     var temperament: String { breed.temperament }
     var breedDescription: String { breed.breedDescription }
-
-    var favoriteButtonLabel: String {
-        isFavorite ? "Remove from Favorites" : "Add to Favorites"
+    func favoriteButtonLabel(context: ModelContext) -> String {
+        isFavorite(context: context) ? "Remove from Favorites" : "Add to Favorites"
     }
-
-    var favoriteButtonColor: Color {
-        isFavorite ? .red : .blue
+    func favoriteButtonColor(context: ModelContext) -> Color {
+        isFavorite(context: context) ? .red : .blue
     }
 }

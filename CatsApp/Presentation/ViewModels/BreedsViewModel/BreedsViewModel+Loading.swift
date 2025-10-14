@@ -34,6 +34,13 @@ extension BreedsViewModel {
             advancePage()
             let reachedEnd = fetchedCount < pageSize
             transition(to: reachedEnd ? .endReached : .idle)
+            Task.detached { [catBreeds] in
+                for breed in catBreeds {
+                    if breed.imageData == nil, let url = breed.referenceImageUrl {
+                        try? await self.repository.cacheImage(forBreedId: breed.id, withUrl: url, context: context)
+                    }
+                }
+            }
         } catch let domainError as DomainError {
             transition(to: .error(domainError))
             await handleFetchFailure(domainError, context: context)

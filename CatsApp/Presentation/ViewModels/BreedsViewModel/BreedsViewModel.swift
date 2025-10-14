@@ -20,6 +20,7 @@ enum ViewState: Equatable {
 final class BreedsViewModel: ObservableObject {
     let repository: BreedsRepositoryProtocol
     let favoritesViewModel: FavoritesViewModel
+    let searchService: SearchServiceProtocol
     
     @Published var catBreeds: [CatBreed] = []
     @Published var searchText: String = ""
@@ -31,6 +32,7 @@ final class BreedsViewModel: ObservableObject {
     init(repository: BreedsRepositoryProtocol = BreedsRepository(), favoritesViewModel: FavoritesViewModel) {
         self.repository = repository
         self.favoritesViewModel = favoritesViewModel
+        self.searchService = SearchService()
     }
     
     func resetPaging() { currentPage = 0 }
@@ -42,12 +44,9 @@ final class BreedsViewModel: ObservableObject {
     var fetchErrorMessage: String? { if case .error(let err) = state { return err.errorDescription } else { return nil } }
 
     var filteredBreeds: [CatBreed] {
-        searchText.isEmpty
-            ? catBreeds
-            : catBreeds.filter { $0.name.lowercased().contains(searchText.lowercased()) }
+        searchService.searchBreeds(query: searchText, in: catBreeds)
     }
 
-    //FavoritesState for favorite breeds
     var favoriteBreeds: [CatBreed] { favoritesViewModel.favorites }
     
     func transition(to newPhase: ViewState) { state = newPhase }
