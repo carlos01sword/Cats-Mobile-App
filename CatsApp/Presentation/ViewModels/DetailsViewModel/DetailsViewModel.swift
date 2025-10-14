@@ -24,7 +24,6 @@ final class DetailsViewModel: ObservableObject {
     var origin: String { breed.origin }
     var temperament: String { breed.temperament }
     var breedDescription: String { breed.breedDescription }
-    
     func favoriteButtonLabel(context: ModelContext) -> String {
         isFavorite(context: context) ? "Remove from Favorites" : "Add to Favorites"
     }
