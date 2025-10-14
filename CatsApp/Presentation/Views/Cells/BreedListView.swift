@@ -7,6 +7,15 @@
 
 import SwiftUI
 
+private extension CGFloat {
+    // The scale factor for the loading ProgressView indicator
+    static var loadingScale: Self = 1.2
+    // The padding around the loading ProgressView indicator
+    static var loadingPadding: Self =  12
+    
+    static let verticalPadding: Self = 10
+}
+
 struct BreedListView<Header: View>: View {
     let breeds: [CatBreed]
     private let header: Header?
@@ -68,7 +77,7 @@ struct BreedListView<Header: View>: View {
                     .onTapGesture { onSelect(breed) }
                     .onAppear { onRowAppear(breed) }
                     .padding(.horizontal)
-                    .padding(.vertical, 10)
+                    .padding(.vertical, .verticalPadding)
                 }
 
                 if isEndReached {
@@ -87,8 +96,8 @@ struct BreedListView<Header: View>: View {
             Spacer()
             ProgressView()
                 .progressViewStyle(CircularProgressViewStyle())
-                .scaleEffect(1.2)
-                .padding(12)
+                .scaleEffect(.loadingScale)
+                .padding(.loadingPadding)
             Spacer()
         }
     }
