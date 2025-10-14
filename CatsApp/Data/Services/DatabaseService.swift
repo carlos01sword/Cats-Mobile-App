@@ -29,6 +29,7 @@ struct DatabaseService: DatabaseServiceProtocol {
         throws -> [CatBreed]
     {
         guard !dtos.isEmpty else { return try fetchAllBreeds(context: context) }
+        
         let existingDescriptor = FetchDescriptor<CatBreed>()
         let existing: [CatBreed]
         do {
@@ -37,12 +38,13 @@ struct DatabaseService: DatabaseServiceProtocol {
             throw DomainError.persistenceError
         }
 
-        var existingIds = Set(existing.map { $0.id })
+        let existingIds = Set(existing.map { $0.id })
 
-        var inserted = false
-        for dto in dtos {
-            if existingIds.contains(dto.id) { continue }
-            let model = CatBreed(
+        let newModels = dtos.compactMap { dto -> CatBreed? in
+            guard !existingIds.contains(dto.id) else {
+                return nil
+            }
+            return CatBreed(
                 id: dto.id,
                 name: dto.name,
                 origin: dto.origin,
@@ -52,11 +54,10 @@ struct DatabaseService: DatabaseServiceProtocol {
                 referenceImageId: dto.reference_image_id,
                 isFavorite: false
             )
-            context.insert(model)
-            existingIds.insert(dto.id)
-            inserted = true
         }
-        if inserted {
+        
+        if !newModels.isEmpty {
+            newModels.forEach { context.insert($0) }
             do {
                 try context.save()
             } catch {
@@ -70,8 +71,8 @@ struct DatabaseService: DatabaseServiceProtocol {
         } catch {
             throw DomainError.persistenceError
         }
-
     }
+    
     @MainActor
     func fetchAllBreeds(context: ModelContext) throws -> [CatBreed] {
         let descriptor = FetchDescriptor<CatBreed>()
@@ -82,6 +83,7 @@ struct DatabaseService: DatabaseServiceProtocol {
             throw DomainError.persistenceError
         }
     }
+    
     @MainActor
     func fetchFavoriteBreeds(context: ModelContext) throws -> [CatBreed] {
         let predicate = #Predicate<CatBreed> { $0.isFavorite == true }
@@ -94,6 +96,7 @@ struct DatabaseService: DatabaseServiceProtocol {
             throw DomainError.persistenceError
         }
     }
+    
     @MainActor
     func toggleFavorite(_ breed: CatBreed, context: ModelContext) throws {
         breed.isFavorite.toggle()
@@ -103,6 +106,7 @@ struct DatabaseService: DatabaseServiceProtocol {
             throw DomainError.persistenceError
         }
     }
+    
     @MainActor
     func cacheImage(forBreedId breedId: String, withUrl urlString: String, context: ModelContext) async throws {
         guard let url = URL(string: urlString) else { return }
