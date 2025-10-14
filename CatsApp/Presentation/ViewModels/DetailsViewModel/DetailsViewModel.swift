@@ -28,7 +28,6 @@ final class DetailsViewModel: ObservableObject {
     func favoriteButtonLabel(context: ModelContext) -> String {
         isFavorite(context: context) ? "Remove from Favorites" : "Add to Favorites"
     }
-    
     func favoriteButtonColor(context: ModelContext) -> Color {
         isFavorite(context: context) ? .red : .blue
     }
