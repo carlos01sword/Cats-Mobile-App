@@ -6,11 +6,11 @@
 
 import SwiftUI
 
-struct FavoritesButton : View{
-    
+struct FavoritesButton: View {
+
     @StateObject var viewModel: DetailsViewModel
     @Environment(\.modelContext) private var context
-    
+
     var body: some View {
         Button {
             viewModel.toggleFavorite(context: context)
@@ -24,7 +24,12 @@ struct FavoritesButton : View{
                 .background(
                     RoundedRectangle(cornerRadius: 12)
                         .fill(viewModel.favoriteButtonColor(context: context))
-                        .shadow(color: Color(.systemGray3), radius: 2, x: 0, y: 2)
+                        .shadow(
+                            color: Color(.systemGray3),
+                            radius: 2,
+                            x: 0,
+                            y: 2
+                        )
                 )
         }
         .padding(.vertical, 12)

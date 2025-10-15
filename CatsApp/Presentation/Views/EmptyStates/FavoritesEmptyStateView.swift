@@ -29,4 +29,3 @@ struct FavoritesEmptyStateView: View {
 #Preview {
     FavoritesEmptyStateView()
 }
-

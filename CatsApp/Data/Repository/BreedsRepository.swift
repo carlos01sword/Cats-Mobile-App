@@ -3,7 +3,8 @@ import SwiftData
 
 protocol BreedsRepositoryProtocol {
     @MainActor
-    func fetchPage(page: Int, limit: Int, context: ModelContext) async throws -> PageResult
+    func fetchPage(page: Int, limit: Int, context: ModelContext) async throws
+        -> PageResult
     @MainActor
     func savePage(_ dtos: [BreedsDataService.CatBreed], context: ModelContext)
         async throws -> [CatBreed]
@@ -14,7 +15,11 @@ protocol BreedsRepositoryProtocol {
     @MainActor
     func fetchAll(context: ModelContext) throws -> [CatBreed]
     @MainActor
-    func cacheImage(forBreedId breedId: String, withUrl urlString: String, context: ModelContext) async throws
+    func cacheImage(
+        forBreedId breedId: String,
+        withUrl urlString: String,
+        context: ModelContext
+    ) async throws
 }
 
 struct PageResult {
@@ -26,13 +31,18 @@ struct BreedsRepository: BreedsRepositoryProtocol {
     private let service: BreedsFetching
     private let database: DatabaseServiceProtocol
 
-    init(service: BreedsFetching = BreedsDataService(), database: DatabaseServiceProtocol = DatabaseService()) {
+    init(
+        service: BreedsFetching = BreedsDataService(),
+        database: DatabaseServiceProtocol = DatabaseService()
+    ) {
         self.service = service
         self.database = database
     }
 
     @MainActor
-    func fetchPage(page: Int, limit: Int, context: ModelContext) async throws -> PageResult {
+    func fetchPage(page: Int, limit: Int, context: ModelContext) async throws
+        -> PageResult
+    {
         do {
             let dtos = try await service.fetchCatsData(
                 page: page,
@@ -49,7 +59,9 @@ struct BreedsRepository: BreedsRepositoryProtocol {
     }
 
     @MainActor
-    func savePage(_ dtos: [BreedsDataService.CatBreed], context: ModelContext) async throws -> [CatBreed] {
+    func savePage(_ dtos: [BreedsDataService.CatBreed], context: ModelContext)
+        async throws -> [CatBreed]
+    {
         do {
             return try database.saveBreeds(dtos, context: context)
         } catch {
@@ -72,11 +84,21 @@ struct BreedsRepository: BreedsRepositoryProtocol {
         try database.fetchAllBreeds(context: context)
     }
     @MainActor
-    func cacheImage(forBreedId breedId: String, withUrl urlString: String, context: ModelContext) async throws {
+    func cacheImage(
+        forBreedId breedId: String,
+        withUrl urlString: String,
+        context: ModelContext
+    ) async throws {
         do {
-            try await database.cacheImage(forBreedId: breedId, withUrl: urlString, context: context)
+            try await database.cacheImage(
+                forBreedId: breedId,
+                withUrl: urlString,
+                context: context
+            )
         } catch {
-            throw DomainError.customError("Failed to cache image: \(error.localizedDescription)")
+            throw DomainError.customError(
+                "Failed to cache image: \(error.localizedDescription)"
+            )
         }
     }
 }

@@ -15,13 +15,17 @@ struct BreedsView: View {
     @State private var selectedBreed: CatBreed?
 
     init(favoritesViewModel: FavoritesViewModel) {
-        _viewModel = StateObject(wrappedValue: BreedsViewModel(favoritesViewModel: FavoritesViewModel()))
+        _viewModel = StateObject(
+            wrappedValue: BreedsViewModel(
+                favoritesViewModel: FavoritesViewModel()
+            )
+        )
     }
 
     var body: some View {
-        ZStack{
+        ZStack {
             if viewModel.catBreeds.isEmpty && viewModel.isLoading {
-                VStack{
+                VStack {
                     ProgressView("Loading Breeds")
                 }
             } else {
@@ -31,7 +35,9 @@ struct BreedsView: View {
                         .navigationTitle("Cats App")
                         .alert(
                             "Failed to Load Data",
-                            isPresented: .constant(viewModel.fetchErrorMessage != nil)
+                            isPresented: .constant(
+                                viewModel.fetchErrorMessage != nil
+                            )
                         ) {
                             Button("OK", role: .cancel) {}
                         } message: {
@@ -40,16 +46,19 @@ struct BreedsView: View {
                         .task { initialLoadIfNeeded() }
                 }
                 .sheet(item: $selectedBreed) { breed in
-                    DetailsView(breed: breed, favoritesViewModel: favoritesViewModel)
+                    DetailsView(
+                        breed: breed,
+                        favoritesViewModel: favoritesViewModel
+                    )
                 }
             }
         }
-        
+
     }
 }
 
-private extension BreedsView {
-    var content: some View {
+extension BreedsView {
+    fileprivate var content: some View {
         Group {
             if isSearchEmptyState {
                 SearchEmptyStateView(searchText: viewModel.searchText)
@@ -57,7 +66,12 @@ private extension BreedsView {
                 BreedListView(
                     breeds: viewModel.filteredBreeds,
                     onSelect: { selectedBreed = $0 },
-                    onFavorite: { favoritesViewModel.toggleFavorite(for: $0, context: context) },
+                    onFavorite: {
+                        favoritesViewModel.toggleFavorite(
+                            for: $0,
+                            context: context
+                        )
+                    },
                     onRowAppear: handleRowAppear,
                     isLoading: viewModel.isLoading,
                     isEndReached: !viewModel.canLoadMore
@@ -66,16 +80,16 @@ private extension BreedsView {
         }
     }
 
-    var isSearchEmptyState: Bool {
+    fileprivate var isSearchEmptyState: Bool {
         !viewModel.searchText.isEmpty && viewModel.filteredBreeds.isEmpty
     }
 
-    func handleRowAppear(_ breed: CatBreed) {
+    fileprivate func handleRowAppear(_ breed: CatBreed) {
         guard viewModel.shouldLoadMore(after: breed) else { return }
         Task { await viewModel.loadMore(context: context) }
     }
 
-    func initialLoadIfNeeded() {
+    fileprivate func initialLoadIfNeeded() {
         viewModel.loadCachedIfAvailable(context: context)
         if viewModel.catBreeds.isEmpty {
             Task { await viewModel.loadInitial(context: context) }

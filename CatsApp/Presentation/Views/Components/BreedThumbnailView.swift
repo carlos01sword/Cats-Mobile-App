@@ -48,7 +48,10 @@ struct BreedThumbnailView: View {
 
 #Preview {
     HStack(spacing: 20) {
-        BreedThumbnailView(urlString: "https://cdn2.thecatapi.com/images/abc.jpg", imageData: nil)
+        BreedThumbnailView(
+            urlString: "https://cdn2.thecatapi.com/images/abc.jpg",
+            imageData: nil
+        )
         BreedThumbnailView(urlString: nil, imageData: nil)
         BreedThumbnailView(urlString: "invalid-url", imageData: nil)
     }

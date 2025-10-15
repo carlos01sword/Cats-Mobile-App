@@ -9,7 +9,7 @@ import SwiftUI
 
 struct BreedTabView: View {
     @EnvironmentObject private var favoritesViewModel: FavoritesViewModel
-    
+
     var body: some View {
         TabView {
             BreedsView(favoritesViewModel: favoritesViewModel)

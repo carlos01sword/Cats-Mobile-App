@@ -8,7 +8,7 @@
 import Foundation
 
 enum MockData {
-    
+
     static let sampleBreed: CatBreed = CatBreed(
         id: "abys",
         name: "Abyssinian",
@@ -20,7 +20,7 @@ enum MockData {
         referenceImageId: "0XYvRd7oD",
         isFavorite: false
     )
-    
+
     static let breeds: [CatBreed] = [
         CatBreed(
             id: "abys",

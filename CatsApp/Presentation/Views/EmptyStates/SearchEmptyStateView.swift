@@ -32,4 +32,3 @@ struct SearchEmptyStateView: View {
     SearchEmptyStateView(searchText: "abc")
         .padding()
 }
-

@@ -5,8 +5,8 @@
 //  Created by Carlos Costa on 05/08/2025.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct FavoritesView: View {
     @Environment(\.modelContext) private var context
@@ -22,7 +22,9 @@ struct FavoritesView: View {
                     breeds: viewModel.favoriteBreeds,
                     header: AverageTabView(breeds: viewModel.favoriteBreeds),
                     onSelect: { selectedBreed = $0 },
-                    onFavorite: { viewModel.toggleFavorite(for: $0, context: context) }
+                    onFavorite: {
+                        viewModel.toggleFavorite(for: $0, context: context)
+                    }
                 )
                 .navigationTitle("Favorites")
             }
