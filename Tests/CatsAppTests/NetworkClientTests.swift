@@ -15,7 +15,8 @@ class MockClient: NetworkClientProtocol {
     var statusCode: Int = 200
     var error: Error?
 
-    func request<T: Decodable>(_ endpoint: Endpoint) async throws -> T where T: Decodable {
+    func request<T: Decodable>(_ endpoint: Endpoint) async throws -> T
+    where T: Decodable {
         if let error = error {
             throw error
         }
@@ -42,50 +43,79 @@ struct NetworkClientTests {
         let json = try JSONEncoder().encode(MockDTO.breedsDTO)
         client.resultData = json
         let endpoint = Endpoint(path: "breeds")
-        let breeds: [BreedsDataService.CatBreed] = try await client.request(endpoint)
+        let breeds: [BreedsDataService.CatBreed] = try await client.request(
+            endpoint
+        )
         #expect(!breeds.isEmpty, "Breeds should not be empty")
-        #expect(breeds.count == MockDTO.breedsDTO.count, "Breeds count should match mock data")
+        #expect(
+            breeds.count == MockDTO.breedsDTO.count,
+            "Breeds count should match mock data"
+        )
         #expect(breeds.first?.id == "abys", "First breed should be Abyssinian")
     }
 }
 
 @Suite("NetworkClient Failure Test")
 struct NetworkClientErrorTests {
-    
+
     @Test("Throws decoding error for empty data")
     func testEmptyDataDecodingError() async {
-            let client = MockClient()
-            client.resultData = Data()
-            let endpoint = Endpoint(path: "breeds")
-            do {
-                _ = try await client.request(endpoint) as [BreedsDataService.CatBreed]
-                #expect(Bool(false), "Expected decoding error for empty data, but got success")
-            } catch {
-                if let netErr = error as? NetworkError {
-                    if case .decoding = netErr {
-                        #expect(true)
-                    } else {
-                        #expect(Bool(false), "Expected decoding error, got \(netErr)")
-                    }
+        let client = MockClient()
+        client.resultData = Data()
+        let endpoint = Endpoint(path: "breeds")
+        do {
+            _ =
+                try await client.request(endpoint)
+                as [BreedsDataService.CatBreed]
+            #expect(
+                Bool(false),
+                "Expected decoding error for empty data, but got success"
+            )
+        } catch {
+            if let netErr = error as? NetworkError {
+                if case .decoding = netErr {
+                    #expect(true)
                 } else {
-                    #expect(Bool(false), "Expected NetworkError but got \(type(of: error))")
+                    #expect(
+                        Bool(false),
+                        "Expected decoding error, got \(netErr)"
+                    )
                 }
+            } else {
+                #expect(
+                    Bool(false),
+                    "Expected NetworkError but got \(type(of: error))"
+                )
             }
         }
-    
+    }
+
     @Test("Throws decoding error for malformed data")
     func testMalformedDataDecodingError() async {
         let client = MockClient()
         client.resultData = Data("not a json".utf8)
         let endpoint = Endpoint(path: "breeds")
         do {
-            _ = try await client.request(endpoint) as [BreedsDataService.CatBreed]
-            #expect(Bool(false), "Expected decoding error for malformed data, but got success")
+            _ =
+                try await client.request(endpoint)
+                as [BreedsDataService.CatBreed]
+            #expect(
+                Bool(false),
+                "Expected decoding error for malformed data, but got success"
+            )
         } catch let error as NetworkError {
-            if case .decoding = error {}
-            else { #expect(Bool(false), "Expected NetworkError.decoding, got \(error)") }
+            if case .decoding = error {
+            } else {
+                #expect(
+                    Bool(false),
+                    "Expected NetworkError.decoding, got \(error)"
+                )
+            }
         } catch {
-            #expect(Bool(false), "Expected NetworkError but got \(type(of: error))")
+            #expect(
+                Bool(false),
+                "Expected NetworkError but got \(type(of: error))"
+            )
         }
     }
 }
@@ -100,16 +130,30 @@ struct NetworkClientStatusCodeTests {
         let endpoint = Endpoint(path: "breeds")
 
         do {
-            _ = try await client.request(endpoint) as [BreedsDataService.CatBreed]
-            #expect(Bool(false), "Expected serverStatus error for \(code), but got success")
+            _ =
+                try await client.request(endpoint)
+                as [BreedsDataService.CatBreed]
+            #expect(
+                Bool(false),
+                "Expected serverStatus error for \(code), but got success"
+            )
         } catch let error as NetworkError {
             if case .serverStatus(let receivedCode) = error {
-                #expect(receivedCode == code, "Expected \(code) status code, got \(receivedCode)")
+                #expect(
+                    receivedCode == code,
+                    "Expected \(code) status code, got \(receivedCode)"
+                )
             } else {
-                #expect(Bool(false), "Expected NetworkError.serverStatus, got \(error)")
+                #expect(
+                    Bool(false),
+                    "Expected NetworkError.serverStatus, got \(error)"
+                )
             }
         } catch {
-            #expect(Bool(false), "Expected NetworkError but got \(type(of: error))")
+            #expect(
+                Bool(false),
+                "Expected NetworkError but got \(type(of: error))"
+            )
         }
     }
 

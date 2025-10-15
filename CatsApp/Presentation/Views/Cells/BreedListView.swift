@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-private extension CGFloat {
+extension CGFloat {
     // The scale factor for the loading ProgressView indicator
-    static var loadingScale: Self = 1.2
+    fileprivate static var loadingScale: Self = 1.2
     // The padding around the loading ProgressView indicator
-    static var loadingPadding: Self =  12
-    
-    static let verticalPadding: Self = 10
+    fileprivate static var loadingPadding: Self = 12
+
+    fileprivate static let verticalPadding: Self = 10
 }
 
 struct BreedListView<Header: View>: View {

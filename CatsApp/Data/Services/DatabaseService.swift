@@ -19,7 +19,11 @@ protocol DatabaseServiceProtocol {
     @MainActor
     func toggleFavorite(_ breed: CatBreed, context: ModelContext) throws
     @MainActor
-    func cacheImage(forBreedId breedId: String, withUrl urlString: String, context: ModelContext) async throws
+    func cacheImage(
+        forBreedId breedId: String,
+        withUrl urlString: String,
+        context: ModelContext
+    ) async throws
 }
 
 struct DatabaseService: DatabaseServiceProtocol {
@@ -29,7 +33,7 @@ struct DatabaseService: DatabaseServiceProtocol {
         throws -> [CatBreed]
     {
         guard !dtos.isEmpty else { return try fetchAllBreeds(context: context) }
-        
+
         let existingDescriptor = FetchDescriptor<CatBreed>()
         let existing: [CatBreed]
         do {
@@ -55,7 +59,7 @@ struct DatabaseService: DatabaseServiceProtocol {
                 isFavorite: false
             )
         }
-        
+
         if !newModels.isEmpty {
             newModels.forEach { context.insert($0) }
             do {
@@ -72,7 +76,7 @@ struct DatabaseService: DatabaseServiceProtocol {
             throw DomainError.persistenceError
         }
     }
-    
+
     @MainActor
     func fetchAllBreeds(context: ModelContext) throws -> [CatBreed] {
         let descriptor = FetchDescriptor<CatBreed>()
@@ -83,7 +87,7 @@ struct DatabaseService: DatabaseServiceProtocol {
             throw DomainError.persistenceError
         }
     }
-    
+
     @MainActor
     func fetchFavoriteBreeds(context: ModelContext) throws -> [CatBreed] {
         let predicate = #Predicate<CatBreed> { $0.isFavorite == true }
@@ -96,7 +100,7 @@ struct DatabaseService: DatabaseServiceProtocol {
             throw DomainError.persistenceError
         }
     }
-    
+
     @MainActor
     func toggleFavorite(_ breed: CatBreed, context: ModelContext) throws {
         breed.isFavorite.toggle()
@@ -106,11 +110,17 @@ struct DatabaseService: DatabaseServiceProtocol {
             throw DomainError.persistenceError
         }
     }
-    
+
     @MainActor
-    func cacheImage(forBreedId breedId: String, withUrl urlString: String, context: ModelContext) async throws {
+    func cacheImage(
+        forBreedId breedId: String,
+        withUrl urlString: String,
+        context: ModelContext
+    ) async throws {
         guard let url = URL(string: urlString) else { return }
-        let descriptor = FetchDescriptor<CatBreed>(predicate: #Predicate { $0.id == breedId })
+        let descriptor = FetchDescriptor<CatBreed>(
+            predicate: #Predicate { $0.id == breedId }
+        )
         guard let breed = try? context.fetch(descriptor).first else { return }
         do {
             let (data, _) = try await URLSession.shared.data(from: url)

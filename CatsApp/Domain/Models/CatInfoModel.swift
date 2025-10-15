@@ -50,6 +50,9 @@ class CatBreed: Identifiable {
 
 extension CatBreed {
     static func sortedByName(_ breeds: [CatBreed]) -> [CatBreed] {
-        breeds.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+        breeds.sorted {
+            $0.name.localizedCaseInsensitiveCompare($1.name)
+                == .orderedAscending
+        }
     }
 }

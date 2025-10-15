@@ -14,6 +14,8 @@ protocol SearchServiceProtocol {
 struct SearchService: SearchServiceProtocol {
     func searchBreeds(query: String, in breeds: [CatBreed]) -> [CatBreed] {
         guard !query.isEmpty else { return breeds }
-        return breeds.filter { $0.name.lowercased().contains(query.lowercased()) }
+        return breeds.filter {
+            $0.name.lowercased().contains(query.lowercased())
+        }
     }
 }

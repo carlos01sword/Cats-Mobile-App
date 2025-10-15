@@ -36,13 +36,15 @@ extension BreedsViewModel {
             return false
         }
     }
-    
+
     func loadCachedIfAvailable(context: ModelContext) {
         guard catBreeds.isEmpty else { return }
-        if let saved = try? repository.fetchAll(context: context), !saved.isEmpty {
+        if let saved = try? repository.fetchAll(context: context),
+            !saved.isEmpty
+        {
             catBreeds = saved
             currentPage = catBreeds.count / pageSize
-            if state == .idle { } else { transition(to: .idle) }
+            if state == .idle {} else { transition(to: .idle) }
         }
     }
 }

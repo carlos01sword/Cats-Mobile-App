@@ -27,4 +27,3 @@ extension View {
         self.modifier(BreedSearchModifier(text: text))
     }
 }
-

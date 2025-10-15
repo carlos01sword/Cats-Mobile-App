@@ -13,7 +13,10 @@ struct BreedRowView: View {
 
     var body: some View {
         HStack(spacing: 16) {
-            BreedThumbnailView(urlString: breed.referenceImageUrl, imageData: breed.imageData)
+            BreedThumbnailView(
+                urlString: breed.referenceImageUrl,
+                imageData: breed.imageData
+            )
 
             Text(breed.name)
                 .font(.headline)
@@ -25,7 +28,9 @@ struct BreedRowView: View {
             if let onFavoriteTapped = onFavoriteTapped {
                 Image(systemName: breed.isFavorite ? "star.fill" : "star")
                     .foregroundColor(.yellow)
-                    .accessibilityLabel(breed.isFavorite ? "Favorited" : "Not favorited")
+                    .accessibilityLabel(
+                        breed.isFavorite ? "Favorited" : "Not favorited"
+                    )
                     .onTapGesture { onFavoriteTapped() }
             }
         }
@@ -39,5 +44,5 @@ struct BreedRowView: View {
 }
 
 #Preview {
-    BreedRowView(breed: MockData.sampleBreed, onFavoriteTapped: { })
+    BreedRowView(breed: MockData.sampleBreed, onFavoriteTapped: {})
 }

@@ -23,7 +23,12 @@ struct AverageTabView: View {
                 .background(
                     RoundedRectangle(cornerRadius: 14)
                         .fill(Color(.systemGray6))
-                        .shadow(color: Color(.systemGray3), radius: 2, x: 0, y: 1)
+                        .shadow(
+                            color: Color(.systemGray3),
+                            radius: 2,
+                            x: 0,
+                            y: 1
+                        )
                         .padding(.horizontal)
                 )
         }
