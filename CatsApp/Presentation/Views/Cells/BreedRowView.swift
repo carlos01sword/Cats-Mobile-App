@@ -38,7 +38,7 @@ struct BreedRowView: View {
         .background(
             RoundedRectangle(cornerRadius: ConstantsUI.rowCornerRadius)
                 .fill(Color(.systemBackground))
-                .applyShadow()
+                .shadow()
         )
     }
 }

@@ -24,7 +24,7 @@ struct DetailsCardView: View {
         .background(
             RoundedRectangle(cornerRadius: ConstantsUI.largeCornerRadius, style: .continuous)
                 .fill(Color(.secondarySystemBackground))
-                .applyShadow()
+                .shadow()
         )
         .padding(.horizontal)
     }

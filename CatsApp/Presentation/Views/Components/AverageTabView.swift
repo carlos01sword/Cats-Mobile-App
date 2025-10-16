@@ -23,7 +23,7 @@ struct AverageTabView: View {
                 .background(
                     RoundedRectangle(cornerRadius: ConstantsUI.averageTabViewCornerRadius)
                         .fill(Color(.systemGray6))
-                        .applyShadow()
+                        .shadow()
                         .padding(.horizontal)
                 )
         }

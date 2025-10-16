@@ -26,7 +26,7 @@ struct FavoritesButton: View {
                         cornerRadius: ConstantsUI.favoritesButtonCornerRadius
                     )
                     .fill(viewModel.favoriteButtonColor(context: context))
-                    .applyShadow()
+                    .shadow()
                 )
         }
         .padding(.vertical, ConstantsUI.favoritesButtonVerticalPadding)

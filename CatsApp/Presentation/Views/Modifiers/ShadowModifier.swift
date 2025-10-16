@@ -15,7 +15,7 @@ struct ShadowModifier: ViewModifier{
 
 
 extension View {
-    func applyShadow() -> some View {
+    func shadow() -> some View {
         self.modifier(ShadowModifier())
     }
 }
