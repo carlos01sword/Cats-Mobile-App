@@ -20,19 +20,16 @@ struct FavoritesButton: View {
                 .foregroundColor(.white)
                 .multilineTextAlignment(.center)
                 .padding()
-                .frame(minWidth: 220)
+                .frame(minWidth: ConstantsUI.favoritesButtonMinWidth)
                 .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(viewModel.favoriteButtonColor(context: context))
-                        .shadow(
-                            color: Color(.systemGray3),
-                            radius: 2,
-                            x: 0,
-                            y: 2
-                        )
+                    RoundedRectangle(
+                        cornerRadius: ConstantsUI.favoritesButtonCornerRadius
+                    )
+                    .fill(viewModel.favoriteButtonColor(context: context))
+                    .applyShadow()
                 )
         }
-        .padding(.vertical, 12)
+        .padding(.vertical, ConstantsUI.favoritesButtonVerticalPadding)
         .frame(maxWidth: .infinity)
         .background(Color(.systemBackground))
     }

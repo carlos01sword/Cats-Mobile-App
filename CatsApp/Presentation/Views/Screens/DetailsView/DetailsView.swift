@@ -25,8 +25,8 @@ struct DetailsView: View {
     var body: some View {
         VStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
-                    Spacer(minLength: 32)
+                VStack(alignment: .leading, spacing: ConstantsUI.cardVerticalSpacing) {
+                    Spacer(minLength: ConstantsUI.cardVerticalSpacing)
                     cardTitle
 
                     DetailsCardView(
@@ -35,7 +35,7 @@ struct DetailsView: View {
                         breedDescription: viewModel.breedDescription
                     )
 
-                    Spacer(minLength: 32)
+                    Spacer(minLength: ConstantsUI.cardVerticalSpacing)
                 }
                 .padding()
             }

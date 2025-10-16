@@ -12,7 +12,7 @@ struct BreedRowView: View {
     let onFavoriteTapped: (() -> Void)?
 
     var body: some View {
-        HStack(spacing: 16) {
+        HStack(spacing: ConstantsUI.rowSpacing) {
             BreedThumbnailView(
                 urlString: breed.referenceImageUrl,
                 imageData: breed.imageData
@@ -36,9 +36,9 @@ struct BreedRowView: View {
         }
         .padding()
         .background(
-            RoundedRectangle(cornerRadius: 16)
+            RoundedRectangle(cornerRadius: ConstantsUI.rowCornerRadius)
                 .fill(Color(.systemBackground))
-                .shadow(color: Color(.systemGray3), radius: 4, x: 0, y: 2)
+                .applyShadow()
         )
     }
 }

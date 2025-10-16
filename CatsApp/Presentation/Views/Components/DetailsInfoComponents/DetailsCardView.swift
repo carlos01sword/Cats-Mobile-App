@@ -6,7 +6,7 @@ struct DetailsCardView: View {
     let breedDescription: String
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 24) {
+        VStack(alignment: .leading, spacing: ConstantsUI.largeVerticalSpacing) {
             Text("Origin:")
                 .font(.headline)
             Text(origin)
@@ -22,9 +22,9 @@ struct DetailsCardView: View {
         }
         .padding()
         .background(
-            RoundedRectangle(cornerRadius: 24, style: .continuous)
+            RoundedRectangle(cornerRadius: ConstantsUI.largeCornerRadius, style: .continuous)
                 .fill(Color(.secondarySystemBackground))
-                .shadow(color: Color.black.opacity(0.1), radius: 8, x: 0, y: 4)
+                .applyShadow()
         )
         .padding(.horizontal)
     }

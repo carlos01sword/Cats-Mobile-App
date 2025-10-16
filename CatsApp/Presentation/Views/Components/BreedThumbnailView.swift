@@ -8,8 +8,6 @@ import SwiftUI
 struct BreedThumbnailView: View {
     let urlString: String?
     let imageData: Data?
-    var size: CGFloat = 60
-    var cornerRadius: CGFloat = 8
 
     var body: some View {
         Group {
@@ -21,7 +19,7 @@ struct BreedThumbnailView: View {
                 AsyncImage(url: url) { phase in
                     switch phase {
                     case .empty:
-                        ImageLoader(cornerRadius: cornerRadius)
+                        ImageLoader()
                     case .success(let image):
                         image
                             .resizable()
@@ -31,7 +29,7 @@ struct BreedThumbnailView: View {
                             .resizable()
                             .scaledToFit()
                     @unknown default:
-                        Color.red.opacity(0.2)
+                        Color.red.opacity(ConstantsUI.shimmerBaseOpacity)
                     }
                 }
             } else {
@@ -40,14 +38,14 @@ struct BreedThumbnailView: View {
                     .scaledToFit()
             }
         }
-        .frame(width: size, height: size)
-        .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+        .frame(width: ConstantsUI.breedThumbnailSize, height: ConstantsUI.breedThumbnailSize)
+        .clipShape(RoundedRectangle(cornerRadius: ConstantsUI.defaultCornerRadius))
         .accessibilityHidden(true)
     }
 }
 
 #Preview {
-    HStack(spacing: 20) {
+    HStack(spacing: ConstantsUI.largeVerticalSpacing) {
         BreedThumbnailView(
             urlString: "https://cdn2.thecatapi.com/images/abc.jpg",
             imageData: nil

@@ -18,17 +18,12 @@ struct AverageTabView: View {
                 .font(.subheadline)
                 .foregroundColor(.secondary)
                 .padding(.horizontal)
-                .frame(height: 36)
+                .frame(height: ConstantsUI.averageTabViewHeight)
                 .frame(maxWidth: .infinity)
                 .background(
-                    RoundedRectangle(cornerRadius: 14)
+                    RoundedRectangle(cornerRadius: ConstantsUI.averageTabViewCornerRadius)
                         .fill(Color(.systemGray6))
-                        .shadow(
-                            color: Color(.systemGray3),
-                            radius: 2,
-                            x: 0,
-                            y: 1
-                        )
+                        .applyShadow()
                         .padding(.horizontal)
                 )
         }
