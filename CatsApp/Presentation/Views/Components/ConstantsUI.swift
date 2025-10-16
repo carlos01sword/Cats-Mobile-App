@@ -37,7 +37,6 @@ struct ConstantsUI {
     // Color
     static let shimmerBaseColor: Color = Color.gray.opacity(0.18)
     
-    
     // Loading
     static let loadingScale: Double = 1.2
     static let loadingPadding: Double = 12

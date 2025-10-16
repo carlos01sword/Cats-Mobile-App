@@ -13,7 +13,6 @@ struct ShadowModifier: ViewModifier{
     }
 }
 
-
 extension View {
     func shadow() -> some View {
         self.modifier(ShadowModifier())
