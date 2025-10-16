@@ -12,7 +12,7 @@ struct SearchEmptyStateView: View {
     var body: some View {
         VStack(spacing: ConstantsUI.defaultVerticalSpacing) {
             Image(systemName: "magnifyingglass")
-                .font(.system(size: ConstantsUI.searchEmptyStateIconSize))
+                .font(.system(size: ConstantsUI.emptyStateIconSize))
                 .foregroundStyle(.secondary)
             Text("No results for \"\(searchText)\"")
                 .font(.headline)

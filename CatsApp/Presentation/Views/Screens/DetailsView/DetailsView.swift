@@ -25,17 +25,17 @@ struct DetailsView: View {
     var body: some View {
         VStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: ConstantsUI.cardVerticalSpacing) {
-                    Spacer(minLength: ConstantsUI.cardVerticalSpacing)
+                VStack(alignment: .leading, spacing: .cardVerticalSpacing) {
+                    Spacer(minLength: .cardVerticalSpacing)
                     cardTitle
-
+                    
                     DetailsCardView(
                         origin: viewModel.origin,
                         temperament: viewModel.temperament,
                         breedDescription: viewModel.breedDescription
                     )
 
-                    Spacer(minLength: ConstantsUI.cardVerticalSpacing)
+                    Spacer(minLength: .cardVerticalSpacing)
                 }
                 .padding()
             }
@@ -50,6 +50,10 @@ struct DetailsView: View {
             .multilineTextAlignment(.center)
             .frame(maxWidth: .infinity, alignment: .center)
     }
+}
+
+private extension CGFloat {
+    static let cardVerticalSpacing: Self = 32
 }
 
 #Preview {

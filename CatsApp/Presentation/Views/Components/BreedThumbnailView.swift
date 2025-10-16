@@ -38,10 +38,16 @@ struct BreedThumbnailView: View {
                     .scaledToFit()
             }
         }
-        .frame(width: ConstantsUI.breedThumbnailSize, height: ConstantsUI.breedThumbnailSize)
-        .clipShape(RoundedRectangle(cornerRadius: ConstantsUI.defaultCornerRadius))
+        .frame(width: .breedThumbnailSize, height: .breedThumbnailSize)
+        .clipShape(
+            RoundedRectangle(cornerRadius: ConstantsUI.defaultCornerRadius)
+        )
         .accessibilityHidden(true)
     }
+}
+
+private extension CGFloat {
+    static let breedThumbnailSize: Self = 60
 }
 
 #Preview {

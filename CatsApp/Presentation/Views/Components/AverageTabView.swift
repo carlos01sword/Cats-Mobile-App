@@ -18,16 +18,21 @@ struct AverageTabView: View {
                 .font(.subheadline)
                 .foregroundColor(.secondary)
                 .padding(.horizontal)
-                .frame(height: ConstantsUI.averageTabViewHeight)
+                .frame(height: .averageTabViewHeight)
                 .frame(maxWidth: .infinity)
                 .background(
-                    RoundedRectangle(cornerRadius: ConstantsUI.averageTabViewCornerRadius)
+                    RoundedRectangle(cornerRadius: .averageTabViewCornerRadius)
                         .fill(Color(.systemGray6))
                         .shadow()
                         .padding(.horizontal)
                 )
         }
     }
+}
+
+private extension CGFloat {
+   static let averageTabViewCornerRadius: Self = 18
+   static let averageTabViewHeight: Self = 36
 }
 
 #Preview {
