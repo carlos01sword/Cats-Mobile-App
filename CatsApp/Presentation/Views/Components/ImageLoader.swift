@@ -20,6 +20,6 @@ struct ImageLoader: View {
 
 #Preview {
     ImageLoader()
-        .frame(width: ConstantsUI.testFrame, height: ConstantsUI.testFrame)
+        .frame(width: ConstantsUI.previewFrame, height: ConstantsUI.previewFrame)
         .padding()
 }

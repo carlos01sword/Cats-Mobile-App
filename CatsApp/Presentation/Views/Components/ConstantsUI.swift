@@ -29,7 +29,7 @@ struct ConstantsUI {
     static let searchEmptyStateIconSize: CGFloat = 36
     static let favoritesButtonMinWidth: CGFloat = 220
     static let averageTabViewHeight: CGFloat = 36
-    static let testFrame: CGFloat = 120
+    static let previewFrame: CGFloat = 120
     
     // Opacity
     static let shimmerBaseOpacity: Double = 0.18
