@@ -10,20 +10,19 @@ import Testing
 
 @testable import CatsApp
 
-final class MockBreedsService: BreedsFetching {
-    let breedsToReturn: [BreedsDataService.CatBreed]?
+struct MockBreedsService {
+    let breedsToReturn: [CatBreedDTO]?
     let errorToThrow: NetworkError?
 
     init(
-        breeds: [BreedsDataService.CatBreed]? = nil,
+        breeds: [CatBreedDTO]? = nil,
         error: NetworkError? = nil
     ) {
         self.breedsToReturn = breeds
         self.errorToThrow = error
     }
 
-    func fetchCatsData(page: Int, limit: Int) async throws -> [BreedsDataService
-        .CatBreed]
+    func fetchCatsData(page: Int, limit: Int) async throws -> [CatBreedDTO]
     {
         if let error = errorToThrow {
             throw error
@@ -92,9 +91,9 @@ struct BreedsDataServiceErrorTests {
         toMatch expected: DomainError
     ) async {
         let client = MockNetworkClient(error: networkError)
-        let service = BreedsDataService(client: client)
+        let service = BreedsDataService.live(client: client)
         await #expect(throws: expected) {
-            _ = try await service.fetchCatsData(page: 0, limit: 10)
+            _ = try await service.fetchCatsData(0, 10)
         }
     }
 
