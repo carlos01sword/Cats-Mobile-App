@@ -8,16 +8,14 @@ import Foundation
 import SwiftData
 
 struct DatabaseService {
-
-    var saveBreeds:
-        @MainActor ([BreedsDataService.CatBreed], ModelContext) throws ->
-            [CatBreed]
+    var saveBreeds: @MainActor ([BreedsDataService.CatBreed], ModelContext) throws -> [CatBreed]
     var fetchAllBreeds: @MainActor (ModelContext) throws -> [CatBreed]
     var fetchFavoriteBreeds: @MainActor (ModelContext) throws -> [CatBreed]
     var toggleFavorite: @MainActor (CatBreed, ModelContext) throws -> Void
-    var cacheImage:
-        @MainActor (String, String, ModelContext) async throws -> Void
+    var cacheImage: @MainActor (String, String, ModelContext) async throws -> Void
+}
 
+extension DatabaseService {
     static func live() -> DatabaseService {
         DatabaseService(
             saveBreeds: { dtos, context in
@@ -30,7 +28,6 @@ struct DatabaseService {
                         throw DomainError.persistenceError
                     }
                 }
-
                 let existingDescriptor = FetchDescriptor<CatBreed>()
                 let existing: [CatBreed]
                 do {
@@ -38,9 +35,7 @@ struct DatabaseService {
                 } catch {
                     throw DomainError.persistenceError
                 }
-
                 let existingIds = Set(existing.map { $0.id })
-
                 let newModels = dtos.compactMap { dto -> CatBreed? in
                     guard !existingIds.contains(dto.id) else {
                         return nil
@@ -56,7 +51,6 @@ struct DatabaseService {
                         isFavorite: false
                     )
                 }
-
                 if !newModels.isEmpty {
                     newModels.forEach { context.insert($0) }
                     do {
@@ -65,14 +59,12 @@ struct DatabaseService {
                         throw DomainError.persistenceError
                     }
                 }
-
                 do {
                     let all = try context.fetch(existingDescriptor)
                     return CatBreed.sortedByName(all)
                 } catch {
                     throw DomainError.persistenceError
                 }
-
             },
             fetchAllBreeds: { context in
                 let descriptor = FetchDescriptor<CatBreed>()
@@ -82,13 +74,10 @@ struct DatabaseService {
                 } catch {
                     throw DomainError.persistenceError
                 }
-
             },
-
             fetchFavoriteBreeds: { context in
                 let predicate = #Predicate<CatBreed> { $0.isFavorite == true }
                 let descriptor = FetchDescriptor<CatBreed>(predicate: predicate)
-
                 do {
                     let favorites = try context.fetch(descriptor)
                     return CatBreed.sortedByName(favorites)
@@ -109,9 +98,7 @@ struct DatabaseService {
                 let descriptor = FetchDescriptor<CatBreed>(
                     predicate: #Predicate { $0.id == breedId }
                 )
-                guard let breed = try? context.fetch(descriptor).first else {
-                    return
-                }
+                guard let breed = try? context.fetch(descriptor).first else { return }
                 do {
                     let (data, _) = try await URLSession.shared.data(from: url)
                     breed.imageData = data

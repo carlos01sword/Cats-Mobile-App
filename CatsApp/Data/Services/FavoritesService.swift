@@ -9,11 +9,12 @@ import Foundation
 import SwiftData
 
 struct FavoritesService {
-
     var fetchFavorites: @MainActor (ModelContext) throws -> [CatBreed]
     var toggleFavorite: @MainActor (CatBreed, ModelContext) throws -> Void
     var isFavorite: @MainActor (CatBreed, ModelContext) throws -> Bool
+}
 
+extension FavoritesService {
     static func live(repository: BreedsRepository = BreedsRepository.live())
         -> FavoritesService
     {
