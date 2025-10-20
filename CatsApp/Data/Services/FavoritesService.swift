@@ -14,18 +14,18 @@ struct FavoritesService {
     var toggleFavorite: @MainActor (CatBreed, ModelContext) throws -> Void
     var isFavorite: @MainActor (CatBreed, ModelContext) throws -> Bool
 
-    static func live(repository: BreedsRepository = BreedsRepository())
+    static func live(repository: BreedsRepository = BreedsRepository.live())
         -> FavoritesService
     {
         FavoritesService(
             fetchFavorites: { context in
-                try repository.fetchFavorites(context: context)
+                try repository.fetchFavorites(context)
             },
             toggleFavorite: { breed, context in
-                try repository.toggleFavorite(breed, context: context)
+                try repository.toggleFavorite(breed, context)
             },
             isFavorite: { breed, context in
-                let favorites = try repository.fetchFavorites(context: context)
+                let favorites = try repository.fetchFavorites(context)
                 return favorites.contains(where: { $0.id == breed.id })
             }
         )

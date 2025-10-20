@@ -18,7 +18,7 @@ enum ViewState: Equatable {
 
 @MainActor
 final class BreedsViewModel: ObservableObject {
-    let repository: BreedsRepositoryProtocol
+    let repository: BreedsRepository
     let favoritesViewModel: FavoritesViewModel
     let searchService: SearchService
 
@@ -30,7 +30,7 @@ final class BreedsViewModel: ObservableObject {
     let pageSize = 10
 
     init(
-        repository: BreedsRepositoryProtocol = BreedsRepository(),
+        repository: BreedsRepository = BreedsRepository.live(),
         favoritesViewModel: FavoritesViewModel
     ) {
         self.repository = repository

@@ -23,7 +23,7 @@ extension BreedsViewModel {
     @discardableResult
     private func loadCachedBreeds(from context: ModelContext) async -> Bool {
         do {
-            let saved = try repository.fetchAll(context: context)
+            let saved = try repository.fetchAll(context)
             guard !saved.isEmpty else { return false }
             catBreeds = saved
             currentPage = catBreeds.count / pageSize
@@ -39,7 +39,7 @@ extension BreedsViewModel {
 
     func loadCachedIfAvailable(context: ModelContext) {
         guard catBreeds.isEmpty else { return }
-        if let saved = try? repository.fetchAll(context: context),
+        if let saved = try? repository.fetchAll(context),
             !saved.isEmpty
         {
             catBreeds = saved
