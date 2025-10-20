@@ -12,7 +12,7 @@ struct BreedsDataService {
 }
 
 extension BreedsDataService {
-    static func live(client: NetworkClientProtocol = NetworkClient()) -> BreedsDataService {
+    static func live(client: NetworkClient = NetworkClient.live()) -> BreedsDataService {
         BreedsDataService(
             fetchCatsData: { page, limit in
                 let endpoint = Endpoint(
@@ -23,8 +23,13 @@ extension BreedsDataService {
                     ]
                 )
                 do {
-                    let breeds: [CatBreedDTO] = try await client.request(endpoint)
-                    return breeds
+                    let data = try await client.requestData(endpoint)
+                    do {
+                        let breeds = try JSONDecoder().decode([CatBreedDTO].self, from: data)
+                        return breeds
+                    } catch {
+                        throw NetworkError.decoding(error)
+                    }
                 } catch let networkError as NetworkError {
                     switch networkError {
                     case .invalidRequest, .serverStatus, .transport:

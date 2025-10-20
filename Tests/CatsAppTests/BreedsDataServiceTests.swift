@@ -10,46 +10,18 @@ import Testing
 
 @testable import CatsApp
 
-struct MockBreedsService {
-    let breedsToReturn: [CatBreedDTO]?
-    let errorToThrow: NetworkError?
-
-    init(
-        breeds: [CatBreedDTO]? = nil,
-        error: NetworkError? = nil
-    ) {
-        self.breedsToReturn = breeds
-        self.errorToThrow = error
-    }
-
-    func fetchCatsData(page: Int, limit: Int) async throws -> [CatBreedDTO]
-    {
-        if let error = errorToThrow {
-            throw error
-        }
-        return Array((breedsToReturn ?? []).prefix(limit))
-    }
-}
-
-final class MockNetworkClient: NetworkClientProtocol {
-    let errorToThrow: NetworkError
-
-    init(error: NetworkError) {
-        self.errorToThrow = error
-    }
-
-    func request<T>(_ endpoint: Endpoint) async throws -> T where T: Decodable {
-        throw errorToThrow
-    }
-}
-
 @Suite("BreedsDataService Success / Empty Data")
 struct BreedsDataServiceTests {
 
     @Test("Fetch breeds returns data")
     func testFetchBreeds() async throws {
-        let service = MockBreedsService(breeds: MockDTO.breedsDTO)
-        let breeds = try await service.fetchCatsData(page: 0, limit: 10)
+        let service = BreedsDataService(
+            fetchCatsData: { page, limit in
+                return Array(MockDTO.breedsDTO.prefix(limit))
+            }
+        )
+
+        let breeds = try await service.fetchCatsData(0, 10)
 
         #expect(!breeds.isEmpty, "Breeds should not be empty")
         #expect(breeds.count == 10, "Breeds count should be = limit")
@@ -77,8 +49,12 @@ struct BreedsDataServiceTests {
 
     @Test("Fetch breeds returns empty array")
     func testFetchEmptyData() async throws {
-        let service = MockBreedsService(breeds: [])
-        let breeds = try await service.fetchCatsData(page: 0, limit: 10)
+        let service = BreedsDataService(
+            fetchCatsData: { page, limit in
+                return []
+            }
+        )
+        let breeds = try await service.fetchCatsData(0, 10)
         #expect(breeds.isEmpty, "Breeds should be empty")
     }
 }
@@ -90,8 +66,14 @@ struct BreedsDataServiceErrorTests {
         for networkError: NetworkError,
         toMatch expected: DomainError
     ) async {
-        let client = MockNetworkClient(error: networkError)
-        let service = BreedsDataService.live(client: client)
+        let mockClient = NetworkClient(
+            requestData: { _ in
+                throw networkError
+            }
+        )
+
+        let service = BreedsDataService.live(client: mockClient)
+
         await #expect(throws: expected) {
             _ = try await service.fetchCatsData(0, 10)
         }
@@ -111,6 +93,21 @@ struct BreedsDataServiceErrorTests {
             for: .decoding(NSError(domain: "", code: 0)),
             toMatch: .decodingError
         )
+    }
+
+    @Test("Bad data maps to DomainError.decodingError")
+    func testBadDataError() async {
+
+        let mockClient = NetworkClient(
+            requestData: { _ in
+                return Data("bad json".utf8)
+            }
+        )
+        let service = BreedsDataService.live(client: mockClient)
+
+        await #expect(throws: DomainError.decodingError) {
+            _ = try await service.fetchCatsData(0, 10)
+        }
     }
 
     @Test("Unknown error maps to DomainError.unknownError")

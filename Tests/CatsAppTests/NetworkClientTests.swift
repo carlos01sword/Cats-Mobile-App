@@ -10,40 +10,26 @@ import Testing
 
 @testable import CatsApp
 
-class MockClient: NetworkClientProtocol {
-    var resultData: Data?
-    var statusCode: Int = 200
-    var error: Error?
-
-    func request<T: Decodable>(_ endpoint: Endpoint) async throws -> T
-    where T: Decodable {
-        if let error = error {
-            throw error
-        }
-        if !(200...299).contains(statusCode) {
-            throw NetworkError.serverStatus(statusCode)
-        }
-        guard let data = resultData else {
-            throw NetworkError.unknown
-        }
-        do {
-            let decoded = try JSONDecoder().decode(T.self, from: data)
-            return decoded
-        } catch {
-            throw NetworkError.decoding(error)
-        }
-    }
-}
 
 @Suite("NetworkClient Success Test")
 struct NetworkClientTests {
     @Test("Successful request decodes MockDTO")
     func testSuccess() async throws {
-        let client = MockClient()
-        let json = try JSONEncoder().encode(MockDTO.breedsDTO)
-        client.resultData = json
+        
+        let jsonData = try JSONEncoder().encode(MockDTO.breedsDTO)
+
+        let client = NetworkClient(
+            requestData: { _ in
+                return jsonData
+            }
+        )
+
         let apiService = BreedsDataService.live(client: client)
-        let breeds: [CatBreedDTO] = try await apiService.fetchCatsData(0, MockDTO.breedsDTO.count)
+        let breeds: [CatBreedDTO] = try await apiService.fetchCatsData(
+            0,
+            MockDTO.breedsDTO.count
+        )
+
         #expect(!breeds.isEmpty, "Breeds should not be empty")
         #expect(
             breeds.count == MockDTO.breedsDTO.count,
@@ -58,8 +44,12 @@ struct NetworkClientErrorTests {
 
     @Test("Throws decoding error for empty data")
     func testEmptyDataDecodingError() async {
-        let client = MockClient()
-        client.resultData = Data()
+        let client = NetworkClient(
+            requestData: { _ in
+                return Data()
+            }
+        )
+
         let apiService = BreedsDataService.live(client: client)
         do {
             _ = try await apiService.fetchCatsData(0, 10)
@@ -86,8 +76,12 @@ struct NetworkClientErrorTests {
 
     @Test("Throws decoding error for malformed data")
     func testMalformedDataDecodingError() async {
-        let client = MockClient()
-        client.resultData = Data("not a json".utf8)
+        let client = NetworkClient(
+            requestData: { _ in
+                return Data("not a json".utf8)
+            }
+        )
+
         let apiService = BreedsDataService.live(client: client)
         do {
             _ = try await apiService.fetchCatsData(0, 10)
@@ -117,9 +111,12 @@ struct NetworkClientErrorTests {
 struct NetworkClientStatusCodeTests {
 
     func runStatusCodeTest(_ code: Int) async {
-        let client = MockClient()
-        client.statusCode = code
-        client.resultData = Data("[]".utf8)
+        let client = NetworkClient(
+            requestData: { _ in
+                throw NetworkError.serverStatus(code)
+            }
+        )
+
         let apiService = BreedsDataService.live(client: client)
         do {
             _ = try await apiService.fetchCatsData(0, 10)
