@@ -8,35 +8,26 @@
 import Foundation
 import SwiftData
 
-protocol FavoritesServiceProtocol {
-    @MainActor
-    func fetchFavorites(context: ModelContext) throws -> [CatBreed]
-    @MainActor
-    func toggleFavorite(_ breed: CatBreed, context: ModelContext) throws
-    @MainActor
-    func isFavorite(_ breed: CatBreed, context: ModelContext) throws -> Bool
-}
+struct FavoritesService {
 
-struct FavoritesService: FavoritesServiceProtocol {
-    private let repository: BreedsRepositoryProtocol
+    var fetchFavorites: @MainActor (ModelContext) throws -> [CatBreed]
+    var toggleFavorite: @MainActor (CatBreed, ModelContext) throws -> Void
+    var isFavorite: @MainActor (CatBreed, ModelContext) throws -> Bool
 
-    init(repository: BreedsRepositoryProtocol = BreedsRepository()) {
-        self.repository = repository
-    }
-
-    @MainActor
-    func fetchFavorites(context: ModelContext) throws -> [CatBreed] {
-        try repository.fetchFavorites(context: context)
-    }
-
-    @MainActor
-    func toggleFavorite(_ breed: CatBreed, context: ModelContext) throws {
-        try repository.toggleFavorite(breed, context: context)
-    }
-
-    @MainActor
-    func isFavorite(_ breed: CatBreed, context: ModelContext) throws -> Bool {
-        let favorites = try fetchFavorites(context: context)
-        return favorites.contains(where: { $0.id == breed.id })
+    static func live(repository: BreedsRepository = BreedsRepository())
+        -> FavoritesService
+    {
+        FavoritesService(
+            fetchFavorites: { context in
+                try repository.fetchFavorites(context: context)
+            },
+            toggleFavorite: { breed, context in
+                try repository.toggleFavorite(breed, context: context)
+            },
+            isFavorite: { breed, context in
+                let favorites = try repository.fetchFavorites(context: context)
+                return favorites.contains(where: { $0.id == breed.id })
+            }
+        )
     }
 }
