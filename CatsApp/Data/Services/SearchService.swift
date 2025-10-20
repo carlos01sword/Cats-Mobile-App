@@ -7,12 +7,10 @@
 
 import Foundation
 
-protocol SearchServiceProtocol {
-    func searchBreeds(query: String, in breeds: [CatBreed]) -> [CatBreed]
-}
-
-struct SearchService: SearchServiceProtocol {
-    func searchBreeds(query: String, in breeds: [CatBreed]) -> [CatBreed] {
+struct SearchService {
+    var searchBreeds: (String, [CatBreed]) -> [CatBreed]
+    
+    static let live = SearchService { query, breeds in
         guard !query.isEmpty else { return breeds }
         return breeds.filter {
             $0.name.lowercased().contains(query.lowercased())

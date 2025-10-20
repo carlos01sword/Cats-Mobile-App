@@ -20,7 +20,7 @@ enum ViewState: Equatable {
 final class BreedsViewModel: ObservableObject {
     let repository: BreedsRepositoryProtocol
     let favoritesViewModel: FavoritesViewModel
-    let searchService: SearchServiceProtocol
+    let searchService: SearchService
 
     @Published var catBreeds: [CatBreed] = []
     @Published var searchText: String = ""
@@ -35,7 +35,7 @@ final class BreedsViewModel: ObservableObject {
     ) {
         self.repository = repository
         self.favoritesViewModel = favoritesViewModel
-        self.searchService = SearchService()
+        self.searchService = SearchService.live
     }
 
     func resetPaging() { currentPage = 0 }
@@ -55,7 +55,8 @@ final class BreedsViewModel: ObservableObject {
     }
 
     var filteredBreeds: [CatBreed] {
-        searchService.searchBreeds(query: searchText, in: catBreeds)
+        let filteredBreeds = searchService.searchBreeds(searchText, catBreeds)
+        return filteredBreeds
     }
 
     var favoriteBreeds: [CatBreed] { favoritesViewModel.favorites }
