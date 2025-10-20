@@ -10,7 +10,7 @@ struct BreedsRepository {
     var fetchPage:
         @MainActor (Int, Int, ModelContext) async throws -> PageResult
     var savePage:
-        @MainActor ([BreedsDataService.CatBreed], ModelContext) async throws ->
+        @MainActor ([CatBreedDTO], ModelContext) async throws ->
             [CatBreed]
     var toggleFavorite: @MainActor (CatBreed, ModelContext) throws -> Void
     var fetchFavorites: @MainActor (ModelContext) throws -> [CatBreed]
@@ -19,15 +19,15 @@ struct BreedsRepository {
         @MainActor (String, String, ModelContext) async throws -> Void
 
     static func live(
-        service: BreedsFetching = BreedsDataService(),
+        service: BreedsDataService = BreedsDataService.live(),
         database: DatabaseService = DatabaseService.live()
     ) -> BreedsRepository {
         BreedsRepository(
             fetchPage: { page, limit, context in
                 do {
                     let dtos = try await service.fetchCatsData(
-                        page: page,
-                        limit: limit
+                        page,
+                        limit
                     )
                     let count = dtos.count
                     let saved = try database.saveBreeds(dtos, context)
@@ -57,9 +57,9 @@ struct BreedsRepository {
             cacheImage: { breedId, urlString, context in
                 do {
                     try await database.cacheImage(
-                      breedId,
-                      urlString,
-                      context
+                        breedId,
+                        urlString,
+                        context
                     )
                 } catch {
                     throw DomainError.customError(

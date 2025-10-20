@@ -8,7 +8,7 @@ import Foundation
 import SwiftData
 
 struct DatabaseService {
-    var saveBreeds: @MainActor ([BreedsDataService.CatBreed], ModelContext) throws -> [CatBreed]
+    var saveBreeds: @MainActor ([CatBreedDTO], ModelContext) throws -> [CatBreed]
     var fetchAllBreeds: @MainActor (ModelContext) throws -> [CatBreed]
     var fetchFavoriteBreeds: @MainActor (ModelContext) throws -> [CatBreed]
     var toggleFavorite: @MainActor (CatBreed, ModelContext) throws -> Void

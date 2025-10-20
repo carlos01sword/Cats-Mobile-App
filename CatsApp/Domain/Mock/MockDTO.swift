@@ -8,8 +8,8 @@
 import Foundation
 
 struct MockDTO {
-    static let breedsDTO: [BreedsDataService.CatBreed] = [
-        BreedsDataService.CatBreed(
+    static let breedsDTO: [CatBreedDTO] = [
+        CatBreedDTO(
             id: "abys",
             name: "Abyssinian",
             origin: "Egypt",
@@ -19,7 +19,7 @@ struct MockDTO {
             life_span: "14 - 15",
             reference_image_id: "0XYvRd7oD"
         ),
-        BreedsDataService.CatBreed(
+        CatBreedDTO(
             id: "aege",
             name: "Aegean",
             origin: "Greece",
@@ -29,7 +29,7 @@ struct MockDTO {
             life_span: "9 - 12",
             reference_image_id: nil
         ),
-        BreedsDataService.CatBreed(
+        CatBreedDTO(
             id: "abob",
             name: "American Bobtail",
             origin: "United States",
@@ -39,7 +39,7 @@ struct MockDTO {
             life_span: "11 - 15",
             reference_image_id: "hBXicehMA"
         ),
-        BreedsDataService.CatBreed(
+        CatBreedDTO(
             id: "acur",
             name: "American Curl",
             origin: "United States",
@@ -50,7 +50,7 @@ struct MockDTO {
             life_span: "12 - 16",
             reference_image_id: "xnsqonbjW"
         ),
-        BreedsDataService.CatBreed(
+        CatBreedDTO(
             id: "asho",
             name: "American Shorthair",
             origin: "United States",
@@ -60,7 +60,7 @@ struct MockDTO {
             life_span: "15 - 17",
             reference_image_id: "JFPROfGtQ"
         ),
-        BreedsDataService.CatBreed(
+        CatBreedDTO(
             id: "awir",
             name: "American Wirehair",
             origin: "United States",
@@ -71,7 +71,7 @@ struct MockDTO {
             life_span: "14 - 18",
             reference_image_id: "3bkZAjRh1"
         ),
-        BreedsDataService.CatBreed(
+        CatBreedDTO(
             id: "amau",
             name: "Arabian Mau",
             origin: "United Arab Emirates",
@@ -82,7 +82,7 @@ struct MockDTO {
             life_span: "12 - 14",
             reference_image_id: nil
         ),
-        BreedsDataService.CatBreed(
+        CatBreedDTO(
             id: "amis",
             name: "Australian Mist",
             origin: "Australia",
@@ -92,7 +92,7 @@ struct MockDTO {
             life_span: "12 - 16",
             reference_image_id: "5AdhMZf6P"
         ),
-        BreedsDataService.CatBreed(
+        CatBreedDTO(
             id: "bali",
             name: "Balinese",
             origin: "United States",
@@ -102,7 +102,7 @@ struct MockDTO {
             life_span: "10 - 15",
             reference_image_id: "13MkvUe8X"
         ),
-        BreedsDataService.CatBreed(
+        CatBreedDTO(
             id: "bamb",
             name: "Bambino",
             origin: "United States",
@@ -112,7 +112,7 @@ struct MockDTO {
             life_span: "9 - 15",
             reference_image_id: nil
         ),
-        BreedsDataService.CatBreed(
+        CatBreedDTO(
             id: "beng",
             name: "Bengal",
             origin: "United States",
@@ -122,7 +122,7 @@ struct MockDTO {
             life_span: "12 - 16",
             reference_image_id: "O3btzLlsO"
         ),
-        BreedsDataService.CatBreed(
+        CatBreedDTO(
             id: "birm",
             name: "Birman",
             origin: "France",
@@ -132,7 +132,7 @@ struct MockDTO {
             life_span: "14 - 16",
             reference_image_id: "HkNS3lqX7"
         ),
-        BreedsDataService.CatBreed(
+        CatBreedDTO(
             id: "bomb",
             name: "Bombay",
             origin: "United States",
