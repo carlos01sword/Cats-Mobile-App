@@ -20,7 +20,7 @@ struct BreedsRepository {
 
     static func live(
         service: BreedsFetching = BreedsDataService(),
-        database: DatabaseServiceProtocol = DatabaseService()
+        database: DatabaseService = DatabaseService.live()
     ) -> BreedsRepository {
         BreedsRepository(
             fetchPage: { page, limit, context in
@@ -30,7 +30,7 @@ struct BreedsRepository {
                         limit: limit
                     )
                     let count = dtos.count
-                    let saved = try database.saveBreeds(dtos, context: context)
+                    let saved = try database.saveBreeds(dtos, context)
                     return PageResult(breeds: saved, fetchedCount: count)
                 } catch let error as DomainError {
                     throw error
@@ -40,26 +40,26 @@ struct BreedsRepository {
             },
             savePage: { dtos, context in
                 do {
-                    return try database.saveBreeds(dtos, context: context)
+                    return try database.saveBreeds(dtos, context)
                 } catch {
                     throw error
                 }
             },
             toggleFavorite: { breed, context in
-                try database.toggleFavorite(breed, context: context)
+                try database.toggleFavorite(breed, context)
             },
             fetchFavorites: { context in
-                try database.fetchFavoriteBreeds(context: context)
+                try database.fetchFavoriteBreeds(context)
             },
             fetchAll: { context in
-                try database.fetchAllBreeds(context: context)
+                try database.fetchAllBreeds(context)
             },
             cacheImage: { breedId, urlString, context in
                 do {
                     try await database.cacheImage(
-                        forBreedId: breedId,
-                        withUrl: urlString,
-                        context: context
+                      breedId,
+                      urlString,
+                      context
                     )
                 } catch {
                     throw DomainError.customError(
