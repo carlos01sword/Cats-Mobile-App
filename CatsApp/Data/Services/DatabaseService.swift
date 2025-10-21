@@ -45,16 +45,7 @@ extension DatabaseService {
                     guard !existingIds.contains(dto.id) else {
                         return nil
                     }
-                    return CatBreed(
-                        id: dto.id,
-                        name: dto.name,
-                        origin: dto.origin,
-                        temperament: dto.temperament,
-                        breedDescription: dto.description,
-                        lifeSpan: dto.life_span,
-                        referenceImageId: dto.reference_image_id,
-                        isFavorite: false
-                    )
+                    return dto.toModel()
                 }
                 if !newModels.isEmpty {
                     newModels.forEach { context.insert($0) }

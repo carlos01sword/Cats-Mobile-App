@@ -46,19 +46,3 @@ extension BreedsDataService {
         )
     }
 }
-
-struct CatBreedDTO: Codable {
-    let id: String
-    let name: String
-    let origin: String
-    let temperament: String
-    let description: String
-    let life_span: String
-    let reference_image_id: String?
-
-    private enum CodingKeys: String, CodingKey {
-        case id, name, origin, temperament, description
-        case life_span = "life_span"
-        case reference_image_id = "reference_image_id"
-    }
-}
