@@ -47,7 +47,8 @@ private extension CGFloat {
     static let rowSpacing: Self = 16
     static let rowCornerRadius: Self = 16
 }
-
+#if DEBUG
 #Preview {
     BreedRowView(breed: MockData.sampleBreed, onFavoriteTapped: {})
 }
+#endif

@@ -25,7 +25,8 @@ struct FavoritesEmptyStateView: View {
         .accessibilityElement(children: .combine)
     }
 }
-
+#if DEBUG
 #Preview {
     FavoritesEmptyStateView()
 }
+#endif

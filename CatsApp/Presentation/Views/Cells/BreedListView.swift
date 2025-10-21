@@ -106,7 +106,8 @@ struct BreedListView<Header: View>: View {
     }
 
 }
-
+#if DEBUG
 #Preview {
     BreedListView(breeds: MockData.breeds)
 }
+#endif

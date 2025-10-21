@@ -49,7 +49,7 @@ struct BreedThumbnailView: View {
 private extension CGFloat {
     static let breedThumbnailSize: Self = 60
 }
-
+#if DEBUG
 #Preview {
     HStack(spacing: ConstantsUI.largeVerticalSpacing) {
         BreedThumbnailView(
@@ -61,3 +61,4 @@ private extension CGFloat {
     }
     .padding()
 }
+#endif

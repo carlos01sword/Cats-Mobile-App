@@ -18,6 +18,7 @@ struct ImageLoader: View {
     }
 }
 
+#if DEBUG
 private extension CGFloat {
     static let previewFrame: Self = 120
 }
@@ -27,3 +28,4 @@ private extension CGFloat {
         .frame(width: .previewFrame, height: .previewFrame)
         .padding()
 }
+#endif

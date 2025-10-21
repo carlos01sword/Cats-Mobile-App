@@ -34,7 +34,8 @@ private extension CGFloat {
    static let averageTabViewCornerRadius: Self = 18
    static let averageTabViewHeight: Self = 36
 }
-
+#if DEBUG
 #Preview {
     AverageTabView(breeds: MockData.breeds)
 }
+#endif

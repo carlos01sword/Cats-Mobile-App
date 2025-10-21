@@ -19,10 +19,11 @@ struct BreedTabView: View {
         }
     }
 }
-
+#if DEBUG
 #Preview {
     let favoritesViewModel = FavoritesViewModel()
     BreedTabView()
         .modelContainer(for: CatBreed.self, inMemory: true)
         .environmentObject(favoritesViewModel)
 }
+#endif

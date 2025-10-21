@@ -55,7 +55,7 @@ struct DetailsView: View {
 private extension CGFloat {
     static let cardVerticalSpacing: Self = 32
 }
-
+#if DEBUG
 #Preview {
     let favoritesViewModel = FavoritesViewModel()
     DetailsView(
@@ -65,3 +65,4 @@ private extension CGFloat {
     .modelContainer(for: CatBreed.self, inMemory: true)
     .environmentObject(favoritesViewModel)
 }
+#endif

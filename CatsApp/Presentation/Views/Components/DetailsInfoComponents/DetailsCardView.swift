@@ -29,7 +29,7 @@ struct DetailsCardView: View {
         .padding(.horizontal)
     }
 }
-
+#if DEBUG
 #Preview {
     DetailsCardView(
         origin: "United States",
@@ -37,3 +37,4 @@ struct DetailsCardView: View {
         breedDescription: "A friendly and playful breed."
     )
 }
+#endif

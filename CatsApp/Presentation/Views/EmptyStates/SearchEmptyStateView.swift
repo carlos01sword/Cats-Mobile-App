@@ -27,8 +27,9 @@ struct SearchEmptyStateView: View {
         .accessibilityElement(children: .combine)
     }
 }
-
+#if DEBUG
 #Preview {
     SearchEmptyStateView(searchText: "abc")
         .padding()
 }
+#endif
