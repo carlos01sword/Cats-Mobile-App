@@ -8,7 +8,7 @@
 import Foundation
 
 struct BreedsDataService {
-    var fetchCatsData: (Int, Int) async throws -> [CatBreedDTO]
+    public internal(set) var fetchCatsData: (Int, Int) async throws -> [CatBreedDTO]
 }
 
 extension BreedsDataService {

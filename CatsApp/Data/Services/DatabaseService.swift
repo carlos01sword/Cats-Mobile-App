@@ -8,11 +8,16 @@ import Foundation
 import SwiftData
 
 struct DatabaseService {
-    var saveBreeds: @MainActor ([CatBreedDTO], ModelContext) throws -> [CatBreed]
-    var fetchAllBreeds: @MainActor (ModelContext) throws -> [CatBreed]
-    var fetchFavoriteBreeds: @MainActor (ModelContext) throws -> [CatBreed]
-    var toggleFavorite: @MainActor (CatBreed, ModelContext) throws -> Void
-    var cacheImage: @MainActor (String, String, ModelContext) async throws -> Void
+    public internal(set) var saveBreeds:
+        @MainActor ([CatBreedDTO], ModelContext) throws -> [CatBreed]
+    public internal(set) var fetchAllBreeds:
+        @MainActor (ModelContext) throws -> [CatBreed]
+    public internal(set) var fetchFavoriteBreeds:
+        @MainActor (ModelContext) throws -> [CatBreed]
+    public internal(set) var toggleFavorite:
+        @MainActor (CatBreed, ModelContext) throws -> Void
+    public internal(set) var cacheImage:
+        @MainActor (String, String, ModelContext) async throws -> Void
 }
 
 extension DatabaseService {
@@ -98,7 +103,9 @@ extension DatabaseService {
                 let descriptor = FetchDescriptor<CatBreed>(
                     predicate: #Predicate { $0.id == breedId }
                 )
-                guard let breed = try? context.fetch(descriptor).first else { return }
+                guard let breed = try? context.fetch(descriptor).first else {
+                    return
+                }
                 do {
                     let (data, _) = try await URLSession.shared.data(from: url)
                     breed.imageData = data

@@ -7,15 +7,17 @@ struct PageResult {
 }
 
 struct BreedsRepository {
-    var fetchPage:
+    public internal(set) var fetchPage:
         @MainActor (Int, Int, ModelContext) async throws -> PageResult
-    var savePage:
-        @MainActor ([CatBreedDTO], ModelContext) async throws ->
-            [CatBreed]
-    var toggleFavorite: @MainActor (CatBreed, ModelContext) throws -> Void
-    var fetchFavorites: @MainActor (ModelContext) throws -> [CatBreed]
-    var fetchAll: @MainActor (ModelContext) throws -> [CatBreed]
-    var cacheImage:
+    public internal(set) var savePage:
+        @MainActor ([CatBreedDTO], ModelContext) async throws -> [CatBreed]
+    public internal(set) var toggleFavorite:
+        @MainActor (CatBreed, ModelContext) throws -> Void
+    public internal(set) var fetchFavorites:
+        @MainActor (ModelContext) throws -> [CatBreed]
+    public internal(set) var fetchAll:
+        @MainActor (ModelContext) throws -> [CatBreed]
+    public internal(set) var cacheImage:
         @MainActor (String, String, ModelContext) async throws -> Void
 
     static func live(

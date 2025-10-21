@@ -8,7 +8,7 @@
 import Foundation
 
 struct SearchService {
-    var searchBreeds: (String, [CatBreed]) -> [CatBreed]
+    public internal(set) var searchBreeds: (String, [CatBreed]) -> [CatBreed]
 }
 
 extension SearchService {

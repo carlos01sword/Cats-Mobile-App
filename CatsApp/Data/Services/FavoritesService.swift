@@ -9,9 +9,12 @@ import Foundation
 import SwiftData
 
 struct FavoritesService {
-    var fetchFavorites: @MainActor (ModelContext) throws -> [CatBreed]
-    var toggleFavorite: @MainActor (CatBreed, ModelContext) throws -> Void
-    var isFavorite: @MainActor (CatBreed, ModelContext) throws -> Bool
+    public internal(set) var fetchFavorites:
+        @MainActor (ModelContext) throws -> [CatBreed]
+    public internal(set) var toggleFavorite:
+        @MainActor (CatBreed, ModelContext) throws -> Void
+    public internal(set) var isFavorite:
+        @MainActor (CatBreed, ModelContext) throws -> Bool
 }
 
 extension FavoritesService {

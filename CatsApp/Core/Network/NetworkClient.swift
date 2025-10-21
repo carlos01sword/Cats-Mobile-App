@@ -22,7 +22,7 @@ enum NetworkError: Error, CustomStringConvertible {
 }
 
 struct NetworkClient {
-    var requestData: (_ endpoint: Endpoint) async throws -> Data
+    public internal(set) var requestData: (_ endpoint: Endpoint) async throws -> Data
     
     init(requestData: @escaping (_ endpoint: Endpoint) async throws -> Data) {
         self.requestData = requestData
