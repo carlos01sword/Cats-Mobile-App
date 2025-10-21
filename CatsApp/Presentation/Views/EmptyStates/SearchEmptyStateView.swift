@@ -10,9 +10,9 @@ import SwiftUI
 struct SearchEmptyStateView: View {
     let searchText: String
     var body: some View {
-        VStack(spacing: 10) {
+        VStack(spacing: ConstantsUI.defaultVerticalSpacing) {
             Image(systemName: "magnifyingglass")
-                .font(.system(size: 36))
+                .font(.system(size: ConstantsUI.emptyStateIconSize))
                 .foregroundStyle(.secondary)
             Text("No results for \"\(searchText)\"")
                 .font(.headline)
@@ -22,13 +22,14 @@ struct SearchEmptyStateView: View {
                 .foregroundStyle(.secondary)
         }
         .multilineTextAlignment(.center)
-        .padding(24)
+        .padding(ConstantsUI.largeVerticalSpacing)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .accessibilityElement(children: .combine)
     }
 }
-
+#if DEBUG
 #Preview {
     SearchEmptyStateView(searchText: "abc")
         .padding()
 }
+#endif

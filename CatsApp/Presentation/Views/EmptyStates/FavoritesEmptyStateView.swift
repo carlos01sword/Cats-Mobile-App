@@ -9,9 +9,9 @@ import SwiftUI
 
 struct FavoritesEmptyStateView: View {
     var body: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: ConstantsUI.defaultVerticalSpacing) {
             Image(systemName: "star")
-                .font(.system(size: 40))
+                .font(.system(size: ConstantsUI.emptyStateIconSize))
                 .foregroundStyle(.secondary)
             Text("No favorites yet")
                 .font(.headline)
@@ -25,7 +25,8 @@ struct FavoritesEmptyStateView: View {
         .accessibilityElement(children: .combine)
     }
 }
-
+#if DEBUG
 #Preview {
     FavoritesEmptyStateView()
 }
+#endif

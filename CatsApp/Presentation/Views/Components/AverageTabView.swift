@@ -18,23 +18,24 @@ struct AverageTabView: View {
                 .font(.subheadline)
                 .foregroundColor(.secondary)
                 .padding(.horizontal)
-                .frame(height: 36)
+                .frame(height: .averageTabViewHeight)
                 .frame(maxWidth: .infinity)
                 .background(
-                    RoundedRectangle(cornerRadius: 14)
+                    RoundedRectangle(cornerRadius: .averageTabViewCornerRadius)
                         .fill(Color(.systemGray6))
-                        .shadow(
-                            color: Color(.systemGray3),
-                            radius: 2,
-                            x: 0,
-                            y: 1
-                        )
+                        .shadow()
                         .padding(.horizontal)
                 )
         }
     }
 }
 
+private extension CGFloat {
+   static let averageTabViewCornerRadius: Self = 18
+   static let averageTabViewHeight: Self = 36
+}
+#if DEBUG
 #Preview {
     AverageTabView(breeds: MockData.breeds)
 }
+#endif

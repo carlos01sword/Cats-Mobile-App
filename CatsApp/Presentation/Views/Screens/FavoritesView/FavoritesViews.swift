@@ -35,9 +35,10 @@ struct FavoritesView: View {
         .onAppear { viewModel.loadFavorites(context: context) }
     }
 }
-
+#if DEBUG
 #Preview {
     FavoritesView()
         .modelContainer(for: CatBreed.self, inMemory: true)
         .environmentObject(FavoritesViewModel())
 }
+#endif

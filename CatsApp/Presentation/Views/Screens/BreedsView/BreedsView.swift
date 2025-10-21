@@ -96,10 +96,11 @@ extension BreedsView {
         }
     }
 }
-
+#if DEBUG
 #Preview {
     let favoritesViewModel = FavoritesViewModel()
     BreedsView(favoritesViewModel: favoritesViewModel)
         .modelContainer(for: CatBreed.self, inMemory: true)
         .environmentObject(favoritesViewModel)
 }
+#endif

@@ -25,17 +25,17 @@ struct DetailsView: View {
     var body: some View {
         VStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
-                    Spacer(minLength: 32)
+                VStack(alignment: .leading, spacing: .cardVerticalSpacing) {
+                    Spacer(minLength: .cardVerticalSpacing)
                     cardTitle
-
+                    
                     DetailsCardView(
                         origin: viewModel.origin,
                         temperament: viewModel.temperament,
                         breedDescription: viewModel.breedDescription
                     )
 
-                    Spacer(minLength: 32)
+                    Spacer(minLength: .cardVerticalSpacing)
                 }
                 .padding()
             }
@@ -52,6 +52,10 @@ struct DetailsView: View {
     }
 }
 
+private extension CGFloat {
+    static let cardVerticalSpacing: Self = 32
+}
+#if DEBUG
 #Preview {
     let favoritesViewModel = FavoritesViewModel()
     DetailsView(
@@ -61,3 +65,4 @@ struct DetailsView: View {
     .modelContainer(for: CatBreed.self, inMemory: true)
     .environmentObject(favoritesViewModel)
 }
+#endif

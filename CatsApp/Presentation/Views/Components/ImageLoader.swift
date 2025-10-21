@@ -6,13 +6,11 @@
 import SwiftUI
 
 struct ImageLoader: View {
-    var baseColor: Color = Color.gray.opacity(0.18)
-    var cornerRadius: CGFloat = 8
 
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                .fill(baseColor)
+            RoundedRectangle(cornerRadius: ConstantsUI.defaultCornerRadius, style: .continuous)
+                .fill(ConstantsUI.shimmerBaseColor)
             ProgressView()
                 .progressViewStyle(.circular)
         }
@@ -20,8 +18,14 @@ struct ImageLoader: View {
     }
 }
 
+#if DEBUG
+private extension CGFloat {
+    static let previewFrame: Self = 120
+}
+
 #Preview {
     ImageLoader()
-        .frame(width: 120, height: 120)
+        .frame(width: .previewFrame, height: .previewFrame)
         .padding()
 }
+#endif
