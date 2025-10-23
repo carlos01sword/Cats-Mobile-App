@@ -1,9 +1,3 @@
-//
-//  BreedsDataService.swift
-//  CatsApp
-//
-//  Created by Carlos Costa on 10/10/2025.
-//
 import Foundation
 import SwiftData
 

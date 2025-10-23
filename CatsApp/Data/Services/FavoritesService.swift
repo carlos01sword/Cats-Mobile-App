@@ -1,10 +1,3 @@
-//
-//  FavoritesService.swift
-//  CatsApp
-//
-//  Created by Carlos Costa on 09/10/2025.
-//
-
 import Foundation
 import SwiftData
 

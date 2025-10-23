@@ -1,10 +1,3 @@
-//
-//  FavoritesEmptyStateView.swift
-//  CatsApp
-//
-//  Created by Carlos Costa on 01/10/2025.
-//
-
 import SwiftUI
 
 struct FavoritesEmptyStateView: View {

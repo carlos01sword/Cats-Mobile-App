@@ -1,10 +1,3 @@
-//
-//  MockDTO.swift
-//  CatsApp
-//
-//  Created by Carlos Costa on 08/10/2025.
-//
-
 import Foundation
 
 struct MockDTO {

@@ -1,10 +1,3 @@
-//
-//  Cache.swift
-//  CatsApp
-//
-//  Created by Carlos Costa on 07/08/2025.
-//
-
 import SwiftData
 
 extension BreedsViewModel {

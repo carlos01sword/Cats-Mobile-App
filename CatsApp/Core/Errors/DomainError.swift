@@ -1,10 +1,3 @@
-//
-//  DomainError.swift
-//  CatsApp
-//
-//  Created by Carlos Costa on 03/10/2025.
-//
-
 import Foundation
 
 enum DomainError: Error, LocalizedError, Equatable {

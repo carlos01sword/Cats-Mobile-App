@@ -1,9 +1,3 @@
-//  FavoritesButton.swift
-//  CatsApp
-//
-//  Created by Carlos Costa on 09/10/2025.
-//
-
 import SwiftUI
 
 struct FavoritesButton: View {

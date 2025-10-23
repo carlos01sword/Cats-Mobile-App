@@ -1,10 +1,3 @@
-//
-//  BreedListView.swift
-//  CatsApp
-//
-//  Created by Carlos Costa on 07/08/2025.
-//
-
 import SwiftUI
 
 struct BreedListView<Header: View>: View {

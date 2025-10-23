@@ -1,10 +1,3 @@
-//
-//  DataService.swift
-//  CatsApp
-//
-//  Created by Carlos Costa on 03/08/2025.
-//
-
 import Foundation
 
 struct BreedsDataService {
