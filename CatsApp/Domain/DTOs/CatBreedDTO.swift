@@ -1,10 +1,3 @@
-//
-//  CatBreedDTO.swift
-//  CatsApp
-//
-//  Created by Carlos Costa on 21/10/2025.
-//
-
 import Foundation
 
 struct CatBreedDTO: Codable {
