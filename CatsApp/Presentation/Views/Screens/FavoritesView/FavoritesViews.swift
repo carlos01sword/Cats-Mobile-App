@@ -1,10 +1,3 @@
-//
-//  FavoritesViews.swift
-//  CatsApp
-//
-//  Created by Carlos Costa on 05/08/2025.
-//
-
 import SwiftData
 import SwiftUI
 

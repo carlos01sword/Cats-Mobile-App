@@ -1,8 +1,3 @@
-//  BreedThumbnailView.swift
-//  CatsApp
-//
-//  Created by Carlos on 01/10/2025.
-//
 import SwiftUI
 
 struct BreedThumbnailView: View {

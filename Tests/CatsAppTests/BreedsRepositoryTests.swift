@@ -16,16 +16,16 @@ import Testing
 struct BreedsRepositoryTests {
     @MainActor
     private func fetchBreeds(page: Int, limit: Int) async throws -> Int {
-        let repository = BreedsRepository(service: BreedsDataService())
+        let repository = BreedsRepository.live()
         let container = try ModelContainer(
             for: CatBreed.self,
             configurations: .init(isStoredInMemoryOnly: true)
         )
         let context = ModelContext(container)
         let result = try await repository.fetchPage(
-            page: page,
-            limit: limit,
-            context: context
+            page,
+            limit,
+            context
         )
         return result.breeds.count
     }
@@ -51,7 +51,7 @@ struct BreedsRepositoryTests {
         // page 6 returns fewer than 10 breeds
         // and page 7 returns 0 breeds as there are only 67 breeds in total so it is expected
         var allIds = Set<String>()
-        let repository = BreedsRepository(service: BreedsDataService())
+        let repository = BreedsRepository.live()
         let container = try ModelContainer(
             for: CatBreed.self,
             configurations: .init(isStoredInMemoryOnly: true)
@@ -59,12 +59,11 @@ struct BreedsRepositoryTests {
         let context = ModelContext(container)
         for page in pages {
             let result = try await repository.fetchPage(
-                page: page,
-                limit: limit,
-                context: context
+                page,
+                limit,
+                context
             )
             let newBreeds = Set(result.breeds.map { $0.id }).subtracting(allIds)
-
             print("\n--- Page \(page) ---")
             print("Total breeds returned: \(result.breeds.count)")
             print(
@@ -73,7 +72,6 @@ struct BreedsRepositoryTests {
             )
             print("\n--- Total ---")
             print("All breeds so far:", allIds.union(newBreeds).sorted())
-
             #expect(
                 newBreeds.count <= limit,
                 "Page \(page) should fetch \(limit) new breeds, got \(newBreeds.count)"

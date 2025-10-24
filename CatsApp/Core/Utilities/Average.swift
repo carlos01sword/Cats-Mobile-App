@@ -1,10 +1,3 @@
-//
-//  Average.swift
-//  CatsApp
-//
-//  Created by Carlos Costa on 06/08/2025.
-//
-
 import Foundation
 import SwiftData
 

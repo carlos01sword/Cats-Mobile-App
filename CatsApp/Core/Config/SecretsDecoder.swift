@@ -1,10 +1,3 @@
-//
-//  SecretsD.swift
-//  CatsApp
-//
-//  Created by Carlos Costa on 02/10/2025.
-//
-
 import Foundation
 
 enum SecretsDecoder{

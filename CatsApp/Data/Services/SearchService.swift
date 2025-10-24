@@ -1,18 +1,11 @@
-//
-//  SearchService.swift
-//  CatsApp
-//
-//  Created by Carlos Costa on 09/10/2025.
-//
-
 import Foundation
 
-protocol SearchServiceProtocol {
-    func searchBreeds(query: String, in breeds: [CatBreed]) -> [CatBreed]
+struct SearchService {
+    public internal(set) var searchBreeds: (String, [CatBreed]) -> [CatBreed]
 }
 
-struct SearchService: SearchServiceProtocol {
-    func searchBreeds(query: String, in breeds: [CatBreed]) -> [CatBreed] {
+extension SearchService {
+    static let live = SearchService { query, breeds in
         guard !query.isEmpty else { return breeds }
         return breeds.filter {
             $0.name.lowercased().contains(query.lowercased())

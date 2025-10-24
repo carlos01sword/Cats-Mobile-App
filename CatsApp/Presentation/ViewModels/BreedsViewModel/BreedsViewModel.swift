@@ -1,10 +1,3 @@
-//
-//  CatDataViewModel.swift
-//  CatsApp
-//
-//  Created by Carlos Costa on 03/08/2025.
-//
-
 import Foundation
 import SwiftData
 
@@ -18,9 +11,9 @@ enum ViewState: Equatable {
 
 @MainActor
 final class BreedsViewModel: ObservableObject {
-    let repository: BreedsRepositoryProtocol
+    let repository: BreedsRepository
     let favoritesViewModel: FavoritesViewModel
-    let searchService: SearchServiceProtocol
+    let searchService: SearchService
 
     @Published var catBreeds: [CatBreed] = []
     @Published var searchText: String = ""
@@ -30,12 +23,12 @@ final class BreedsViewModel: ObservableObject {
     let pageSize = 10
 
     init(
-        repository: BreedsRepositoryProtocol = BreedsRepository(),
+        repository: BreedsRepository = BreedsRepository.live(),
         favoritesViewModel: FavoritesViewModel
     ) {
         self.repository = repository
         self.favoritesViewModel = favoritesViewModel
-        self.searchService = SearchService()
+        self.searchService = SearchService.live
     }
 
     func resetPaging() { currentPage = 0 }
@@ -55,7 +48,8 @@ final class BreedsViewModel: ObservableObject {
     }
 
     var filteredBreeds: [CatBreed] {
-        searchService.searchBreeds(query: searchText, in: catBreeds)
+        let filteredBreeds = searchService.searchBreeds(searchText, catBreeds)
+        return filteredBreeds
     }
 
     var favoriteBreeds: [CatBreed] { favoritesViewModel.favorites }

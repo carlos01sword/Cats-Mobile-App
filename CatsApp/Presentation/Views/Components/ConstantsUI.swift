@@ -1,10 +1,3 @@
-//
-//  ConstantsUI.swift
-//  CatsApp
-//
-//  Created by Carlos Costa on 16/10/2025.
-//
-
 import Foundation
 import SwiftUI
 

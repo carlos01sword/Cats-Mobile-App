@@ -1,10 +1,3 @@
-//
-//  Loading.swift
-//  CatsApp
-//
-//  Created by Carlos Costa on 07/08/2025.
-//
-
 import Foundation
 import SwiftData
 
@@ -25,9 +18,9 @@ extension BreedsViewModel {
     private func loadPage(context: ModelContext, isInitial: Bool) async {
         do {
             let pageResult = try await repository.fetchPage(
-                page: currentPage,
-                limit: pageSize,
-                context: context
+                currentPage,
+                pageSize,
+                context
             )
             let fetchedCount = pageResult.fetchedCount
             catBreeds = pageResult.breeds
@@ -43,9 +36,9 @@ extension BreedsViewModel {
                     if breed.imageData == nil, let url = breed.referenceImageUrl
                     {
                         try? await self.repository.cacheImage(
-                            forBreedId: breed.id,
-                            withUrl: url,
-                            context: context
+                            breed.id,
+                            url,
+                            context
                         )
                     }
                 }

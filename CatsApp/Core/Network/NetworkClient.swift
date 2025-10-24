@@ -21,51 +21,50 @@ enum NetworkError: Error, CustomStringConvertible {
     }
 }
 
-protocol NetworkClientProtocol {
-    func request<T: Decodable>(_ endpoint: Endpoint) async throws -> T
+struct NetworkClient {
+    public internal(set) var requestData: (_ endpoint: Endpoint) async throws -> Data
+    
+    init(requestData: @escaping (_ endpoint: Endpoint) async throws -> Data) {
+        self.requestData = requestData
+    }
 }
 
-struct NetworkClient: NetworkClientProtocol {
-    let baseURL: URL
-    let urlSession: URLSession
-    let defaultHeaders: [String: String]
-
-    init(
+extension NetworkClient {
+    static func live(
         baseURL: URL = URL(string: "https://api.thecatapi.com/v1")!,
         urlSession: URLSession = .shared,
         defaultHeaders: [String: String] = [
             "x-api-key": SecretsDecoder.breedsApiKey
         ]
-    ) {
-        self.baseURL = baseURL
-        self.urlSession = urlSession
-        self.defaultHeaders = defaultHeaders
-    }
-
-    func request<T: Decodable>(_ endpoint: Endpoint) async throws -> T {
-        guard
-            let urlRequest = endpoint.makeRequest(
-                baseURL: baseURL,
-                defaultHeaders: defaultHeaders
-            )
-        else {
-            throw NetworkError.invalidRequest
-        }
-        do {
-            let (data, response) = try await urlSession.data(for: urlRequest)
-            if let http = response as? HTTPURLResponse,
-                !(200...299).contains(http.statusCode)
-            {
-                throw NetworkError.serverStatus(http.statusCode)
+    ) -> NetworkClient {
+        NetworkClient(
+            requestData: { endpoint in
+                guard
+                    let urlRequest = endpoint.makeRequest(
+                        baseURL: baseURL,
+                        defaultHeaders: defaultHeaders
+                    )
+                else {
+                    throw NetworkError.invalidRequest
+                }
+                
+                do {
+                    let (data, response) = try await urlSession.data(for: urlRequest)
+                    
+                    if let http = response as? HTTPURLResponse,
+                        !(200...299).contains(http.statusCode)
+                    {
+                        throw NetworkError.serverStatus(http.statusCode)
+                    }
+                    
+                    return data
+                    
+                } catch let error as NetworkError {
+                    throw error
+                } catch {
+                    throw NetworkError.transport(error)
+                }
             }
-            do {
-                let decoded = try JSONDecoder().decode(T.self, from: data)
-                return decoded
-            } catch {
-                throw NetworkError.decoding(error)
-            }
-        } catch {
-            throw NetworkError.transport(error)
-        }
+        )
     }
 }
